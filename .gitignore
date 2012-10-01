@@ -1,0 +1,11 @@
+# Files to ignore
+
+# Compiled
+*.jar
+*.class
+*/bin
+
+# Eclipse stuff
+*.metadata
+*.project
+*.settings
