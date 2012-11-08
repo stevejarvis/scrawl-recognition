@@ -4,6 +4,10 @@
 *.jar
 *.class
 */bin
+*__pycache__
 
 # Metadata is a huge folder of who-knows-what
 *.metadata/
+
+# Neural net has it's own home
+/NetworkTraining/neuralnet
