@@ -1,7 +1,10 @@
 These are CSV files created from the MNIST database of handwritten digits.
 
-Each line, except for the initial header line in train.csv, represents one image
+Each line, except for the initial header line in original-data.csv, represents one image
 of a handwritten digit. Each image was 28x28 pixels for a total of 784 pixels.
 
 The first character of each line is the digit the rest of the line represents, the
 rest of the line is the color value, 0 - 255, of the 784 pixels, one at a time.
+
+train-no-header.csv is 32,000 lines of data long
+test-no-header.csv is 10,000 lines of data long
