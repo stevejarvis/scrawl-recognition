@@ -5,6 +5,7 @@
 *.class
 */bin
 *__pycache__
+*.pyc
 
 # Metadata is a huge folder of who-knows-what
 *.metadata/
