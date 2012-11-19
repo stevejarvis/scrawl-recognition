@@ -20,7 +20,7 @@ import threading
 '''
 The data we have currently is for 28x28 samples, possible dimensions for
 section numbers (and neural net size) are:
-4, 16, 49, or 196 total sections.
+4, 16, 49, 196, 784 total sections.
 '''
 SECTIONS = 196
 
@@ -73,11 +73,11 @@ def sections_as_ink(values, sections):
 
 def _learned(nn, num_sections):
     ''' Determine if the network knows what's up yet. '''
-    goal = .8
-    total = 100
+    goal = .5
+    total = 1000
     correct = 0
-    with open('./data/train-no-header.csv', 'r') as fh:
-        for i in range(100):
+    with open('./data/test-no-header.csv', 'r') as fh:
+        for i in range(total):
             line = fh.readline()
             pixels = [int(x) for x in line[2:].split(',')]
             inputs = sections_as_ink(_two_dimension(pixels), num_sections)
@@ -86,6 +86,7 @@ def _learned(nn, num_sections):
             # Interpret as the index of the greatest output is the guess.
             n = max(res)
             ans = [i for i, j in enumerate(res) if j == n]
+            #print('response:  %s\tlist: %s\nexpected: %s' %(ans, res, line[0]))
             if int(line[0]) == ans[0]:
                 correct += 1
     print('%d out of %d' %(correct, total))
@@ -105,9 +106,7 @@ def _draw_things(screen, pixels, inked):
     section_dimensions = 28 / sections_per_side
     for y in range(sections_per_side):
         for x in range(sections_per_side):
-            color_index = y * sections_per_side + x
-            print('index: %d value: %d' %(color_index, inked[color_index]))
-            ink_color = [inked[color_index] * 255] * 3
+            ink_color = [inked[y * sections_per_side + x] * 255] * 3
             start_x = section_dimensions * x +56
             start_y = section_dimensions * y
             pygame.draw.rect(screen, 
@@ -119,7 +118,9 @@ def _draw_things(screen, pixels, inked):
 
 def train(nnet, num_sections, screen):
     ''' With chunks of data from the file, train the network. '''
+    file_count = 0
     while not _learned(nnet, num_sections):
+        print('Gone through the file %d times.' %file_count)
         with open('./data/train-no-header.csv', 'r') as fh:
             data = []
             # Not at all resource friendly. If issues, use generator.
@@ -134,26 +135,35 @@ def train(nnet, num_sections, screen):
                 if screen:
                     t = threading.Thread(target=_draw_things,
                                          args=(screen, pixels, inputs))
-                    t.start()
-                    # Just pause so I can decipher what this looks like.
-                    time.sleep(5)
+                    t.start()    
                 data.append((inputs, ans))
-                # We'll train on data sizes of 500
-                if line_count % 500 == 0:
-                    nn.train_network(data, momentum=0.8, iters=100)
+                if line_count % 100 == 0:
+                    nn.train_network(data, 
+                                     change_rate=0.5,
+                                     momentum=0.2, 
+                                     iters=1000)
+                    if _learned(nnet, num_sections):
+                        print('Made it!!')
+                        import sys
+                        sys.exit(0)
                     data = []
+        file_count += 1
         
 if __name__ == '__main__':
-    try:
-        import pygame
-        pygame.init()
-        screen = pygame.display.set_mode((256, 128))
-    except ImportError:
-        print('Cannot do visualizations without PyGame.')
+    visual_wanted = False
+    if visual_wanted:
+        try:
+            import pygame
+        except ImportError:
+            print('Cannot do visualizations without PyGame.')
+            screen = None
+        else:
+            pygame.init()
+            screen = pygame.display.set_mode((84, 28))
+    else:
         screen = None
         
-    # I read that a good number of hidden sections is the average of in & out.
-    num_hidden = int((SECTIONS + 10) / 2)
+    num_hidden = SECTIONS * 2
     nn = neuralnet.NeuralNetwork(SECTIONS, num_hidden, 10)
     
     train(nn, SECTIONS, screen)
