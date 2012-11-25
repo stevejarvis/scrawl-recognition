@@ -86,10 +86,8 @@ def _learned(nn, num_sections, count_seen=None):
             print(res)
             # The results is just a list of outputs between -1 and 1.
             # Interpret as the index of the greatest output is the guess.
-            n = max(res)
-            ans = [i for i, j in enumerate(res) if j == n]
-            #print('response:  %s\tlist: %s\nexpected: %s' %(ans, res, line[0]))
-            if int(line[0]) == ans[0]:
+            ans = res.index(max(res))
+            if int(line[0]) == ans:
                 correct += 1
     percent = float(correct) / float(total)
     print('%d out of %d. %f percent.' %(correct, total, percent))
@@ -131,7 +129,7 @@ def train(nnet, num_sections, screen):
             for line_count, line in enumerate(fh.readlines()):
                 # First character of each line is the answer digit.
                 correct_index = int(line[0])
-                ans = [1 if correct_index == i else -1 for i in range(10)]
+                ans = [3 if correct_index == i else -1 for i in range(10)]
                 # Pixels are a 0-255 color rating, comma separated, for each
                 # character in the rest of the line. 1 character -> 1 pixel.
                 pixels = [int(x) for x in line[2:].split(',')]
