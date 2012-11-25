@@ -72,6 +72,41 @@ def sections_as_ink(values, sections):
             results.append(0)
     return results
 
+def get_densities(values):
+    ''' Pass the pixels in a 2d list.
+    Return a list of 5 values representing pixel distribution in the image.
+    Total % pixels "on", % north of half, % south of half, % left of half, % 
+    right of half. '''
+    total = north = south = west = east = 0
+    threshold = 245
+    # Get north count
+    for y in range(14):
+        for x in range(28):
+            if values[y][x] >= threshold:
+                north += 1
+    # Get south
+    for y in range(14, 28):
+        for x in range(28):
+            if values[y][x] >= threshold:
+                south += 1
+    # West
+    for y in range(28):
+        for x in range(14):
+            if values[y][x] >= threshold:
+                west += 1   
+    # East
+    for y in range(28):
+        for x in range(14,28):
+            if values[y][x] >= threshold:
+                east += 1
+    
+    total = north + south + west + east
+                
+    vals = [float(x) / float(784) for x in [total, north, south, west, east]]
+    # Need to expand these values a bit. Get some space!
+    vals = [x * 10 for x in vals]
+    return vals
+
 def _learned(nn, num_sections, count_seen=None):
     ''' Determine if the network knows what's up yet. '''
     goal = .5
@@ -81,9 +116,9 @@ def _learned(nn, num_sections, count_seen=None):
         for i in range(total):
             line = fh.readline()
             pixels = [int(x) for x in line[2:].split(',')]
-            inputs = sections_as_ink(_two_dimension(pixels), num_sections)
+            two_d = _two_dimension(pixels)
+            inputs = sections_as_ink(two_d, num_sections) + get_densities(two_d)
             res = nn.evaluate(inputs)
-            print(res)
             # The results is just a list of outputs between -1 and 1.
             # Interpret as the index of the greatest output is the guess.
             ans = res.index(max(res))
@@ -129,11 +164,16 @@ def train(nnet, num_sections, screen):
             for line_count, line in enumerate(fh.readlines()):
                 # First character of each line is the answer digit.
                 correct_index = int(line[0])
+                # Training to 1 & -1 yields results all very low.
                 ans = [3 if correct_index == i else -1 for i in range(10)]
                 # Pixels are a 0-255 color rating, comma separated, for each
                 # character in the rest of the line. 1 character -> 1 pixel.
                 pixels = [int(x) for x in line[2:].split(',')]
-                inputs = sections_as_ink(_two_dimension(pixels), num_sections)
+                two_d = _two_dimension(pixels)
+                inputs = (sections_as_ink(two_d, num_sections) + 
+                          get_densities(two_d))
+                
+                # If it's wanted and time, draw things.
                 if screen and line_count % 100 == 0:
                     t = threading.Thread(target=_draw_things,
                                          args=(screen, pixels, inputs))
@@ -170,6 +210,7 @@ if __name__ == '__main__':
         screen = None
         
     num_hidden = SECTIONS
-    nn = neuralnet.NeuralNetwork(SECTIONS, num_hidden, 10)
+    # Make input 5 neurons larger to add pixel densities to the mix
+    nn = neuralnet.NeuralNetwork(SECTIONS + 5, num_hidden, 10)
     
     train(nn, SECTIONS, screen)
