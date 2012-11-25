@@ -12,6 +12,7 @@ Divisor so we fill each section with no leftovers, perf square because
 we want to deal with a physical square.
 '''
 
+from __future__ import print_function
 import neuralnet
 import math
 import time
@@ -22,7 +23,7 @@ The data we have currently is for 28x28 samples, possible dimensions for
 section numbers (and neural net size) are:
 4, 16, 49, 196, 784 total sections.
 '''
-SECTIONS = 196
+SECTIONS = 49
 
 def _two_dimension(pixels):
     ''' Pixels must be a perfect square. Access by twod[y][x] '''
@@ -53,7 +54,7 @@ def _section_contains_ink(lst, section_num, sections):
     ret.sort()
     ret.reverse()
     # Change the threshold here
-    if ret[0] > 200:
+    if ret[0] > 245:
         return True
     return False
 
@@ -71,7 +72,7 @@ def sections_as_ink(values, sections):
             results.append(0)
     return results
 
-def _learned(nn, num_sections):
+def _learned(nn, num_sections, count_seen=None):
     ''' Determine if the network knows what's up yet. '''
     goal = .5
     total = 1000
@@ -82,6 +83,7 @@ def _learned(nn, num_sections):
             pixels = [int(x) for x in line[2:].split(',')]
             inputs = sections_as_ink(_two_dimension(pixels), num_sections)
             res = nn.evaluate(inputs)
+            print(res)
             # The results is just a list of outputs between -1 and 1.
             # Interpret as the index of the greatest output is the guess.
             n = max(res)
@@ -89,10 +91,12 @@ def _learned(nn, num_sections):
             #print('response:  %s\tlist: %s\nexpected: %s' %(ans, res, line[0]))
             if int(line[0]) == ans[0]:
                 correct += 1
-    print('%d out of %d' %(correct, total))
-    return correct / total >= goal
+    percent = float(correct) / float(total)
+    print('%d out of %d. %f percent.' %(correct, total, percent))
+    return percent >= goal
 
 def _draw_things(screen, pixels, inked):
+    ''' Just give a visual to verify data makes sense. '''
     # Paint it black
     screen.fill((0,0,0))
     # Draw the pixels
@@ -120,7 +124,7 @@ def train(nnet, num_sections, screen):
     ''' With chunks of data from the file, train the network. '''
     file_count = 0
     while not _learned(nnet, num_sections):
-        print('Gone through the file %d times.' %file_count)
+        print('\n***\nGone through the file %d times.\n***\n' %file_count)
         with open('./data/train-no-header.csv', 'r') as fh:
             data = []
             # Not at all resource friendly. If issues, use generator.
@@ -132,17 +136,21 @@ def train(nnet, num_sections, screen):
                 # character in the rest of the line. 1 character -> 1 pixel.
                 pixels = [int(x) for x in line[2:].split(',')]
                 inputs = sections_as_ink(_two_dimension(pixels), num_sections)
-                if screen:
+                if screen and line_count % 100 == 0:
                     t = threading.Thread(target=_draw_things,
                                          args=(screen, pixels, inputs))
                     t.start()    
+                    
                 data.append((inputs, ans))
-                if line_count % 100 == 0:
+                # When we read in a good chunk of data, train.
+                if line_count % 200 == 0:
                     nn.train_network(data, 
-                                     change_rate=0.5,
-                                     momentum=0.2, 
-                                     iters=1000)
-                    if _learned(nnet, num_sections):
+                                     change_rate=0.2,
+                                     momentum=0.1, 
+                                     iters=500)
+                    if _learned(nnet, 
+                                num_sections, 
+                                (file_count * line_count + line_count)):
                         print('Made it!!')
                         import sys
                         sys.exit(0)
@@ -150,7 +158,7 @@ def train(nnet, num_sections, screen):
         file_count += 1
         
 if __name__ == '__main__':
-    visual_wanted = False
+    visual_wanted = True
     if visual_wanted:
         try:
             import pygame
@@ -163,7 +171,7 @@ if __name__ == '__main__':
     else:
         screen = None
         
-    num_hidden = SECTIONS * 2
+    num_hidden = SECTIONS
     nn = neuralnet.NeuralNetwork(SECTIONS, num_hidden, 10)
     
     train(nn, SECTIONS, screen)
