@@ -23,7 +23,7 @@ The data we have currently is for 28x28 samples, possible dimensions for
 section numbers (and neural net size) are:
 4, 16, 49, 196, 784 total sections.
 '''
-SECTIONS = 49
+SECTIONS = 196
 
 def _two_dimension(pixels):
     ''' Pixels must be a perfect square. Access by twod[y][x] '''
@@ -109,7 +109,7 @@ def get_densities(values):
 
 def _learned(nn, num_sections, count_seen=None):
     ''' Determine if the network knows what's up yet. '''
-    goal = .5
+    goal = .8
     total = 1000
     correct = 0
     with open('./data/test-no-header.csv', 'r') as fh:
@@ -125,7 +125,7 @@ def _learned(nn, num_sections, count_seen=None):
             if int(line[0]) == ans:
                 correct += 1
     percent = float(correct) / float(total)
-    print('%d out of %d. %f percent.' %(correct, total, percent))
+    print('%d out of %d. %f percent.' %(correct, total, percent * 100))
     return percent >= goal
 
 def _draw_things(screen, pixels, inked):
@@ -183,9 +183,9 @@ def train(nnet, num_sections, screen):
                 # When we read in a good chunk of data, train.
                 if line_count % 200 == 0:
                     nn.train_network(data, 
-                                     change_rate=0.2,
-                                     momentum=0.1, 
-                                     iters=500)
+                                     change_rate=0.002,
+                                     momentum=0.001, 
+                                     iters=200)
                     if _learned(nnet, 
                                 num_sections, 
                                 (file_count * line_count + line_count)):
@@ -196,7 +196,7 @@ def train(nnet, num_sections, screen):
         file_count += 1
         
 if __name__ == '__main__':
-    visual_wanted = True
+    visual_wanted = False
     if visual_wanted:
         try:
             import pygame
@@ -209,7 +209,7 @@ if __name__ == '__main__':
     else:
         screen = None
         
-    num_hidden = SECTIONS
+    num_hidden = SECTIONS + 5
     # Make input 5 neurons larger to add pixel densities to the mix
     nn = neuralnet.NeuralNetwork(SECTIONS + 5, num_hidden, 10)
     
