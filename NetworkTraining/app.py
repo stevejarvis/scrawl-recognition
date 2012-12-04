@@ -162,6 +162,7 @@ def _draw_things(screen, pixels, inked):
 def train(nnet, num_sections, screen, learn_rate, mom_rate):
     ''' With chunks of data from the file, train the network. '''
     file_count = 0
+    # Added the extra file_count check or this test goes forever.
     while not _learned(nnet, num_sections) and file_count < 1:
         print('\n***\nGone through the file %d times.\n***\n' %file_count)
         with open('./data/train-no-header.csv', 'r') as fh:
