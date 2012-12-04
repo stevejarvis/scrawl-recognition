@@ -110,7 +110,7 @@ def get_densities(values):
 
 def _learned(nn, num_sections, count_seen=None):
     ''' Determine if the network knows what's up yet. '''
-    goal = .95
+    goal = .90
     total = 1000
     correct = 0
     with open('./data/test-no-header.csv', 'r') as fh:
@@ -161,7 +161,7 @@ def _draw_things(screen, pixels, inked):
 def train(nnet, num_sections, screen, learn_rate, mom_rate):
     ''' With chunks of data from the file, train the network. '''
     file_count = 0
-    while not _learned(nnet, num_sections):
+    while not _learned(nnet, num_sections) and file_count < 1:
         print('\n***\nGone through the file %d times.\n***\n' %file_count)
         with open('./data/train-no-header.csv', 'r') as fh:
             data = []
@@ -193,7 +193,7 @@ def train(nnet, num_sections, screen, learn_rate, mom_rate):
                                      iters=200)
                     if _learned(nnet, 
                                 num_sections, 
-                                (file_count * 200 + 200)):
+                                (file_count * line_count + line_count)):
                         print('Made it!! %s' %threading.current_thread().name)
                         # Better actually save these things!
                         nnet.save_weights(r'./results/%s_weights.txt' %threading.
