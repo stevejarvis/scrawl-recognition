@@ -126,11 +126,12 @@ def _learned(nn, num_sections, count_seen=None):
             if int(line[0]) == ans:
                 correct += 1
     percent = float(correct) / float(total)
-    print('%s %d out of %d. %f percent.' %(threading.current_thread().name,
-                                           correct, total, percent * 100))
-    if count_seen != None:
-        # Log the number of iterations and success rate
-        logging.info('%d %d' %(count_seen, percent * 100))
+    if count_seen == None:
+        count_seen = 0
+    print('%s %d out of %d. %f percent. Seen %d.' %(threading.current_thread().name,
+                                           correct, total, percent * 100, count_seen))
+    # Log the number of iterations and success rate
+    logging.info('%d %f' %(count_seen, percent * 100))
     return percent >= goal
 
 def _draw_things(screen, pixels, inked):
@@ -217,8 +218,8 @@ if __name__ == '__main__':
     else:
         screen = None
         
-    nnet_sizes = [49, 196, 784]
-    rates = [(0.002,0.001), (0.0005,0.0), (0.0001,0.00005)]
+    nnet_sizes = [16, 49, 196, 784]
+    rates = [(0.02, 0.01), (0.002,0.001), (0.0002,0.0001)]
     
     logging.basicConfig(level=logging.INFO,
                         format='%(threadName)s %(asctime)s %(levelname)s %(message)s',
