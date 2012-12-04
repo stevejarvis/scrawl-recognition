@@ -7,6 +7,42 @@ visual and see how everyone did.
 import sys
 import matplotlib.pyplot as lab
 
+def get_style_color(k):
+    ''' Specific for values in app.py. Return tuple of (color, marker, label)
+    Would be made better with regex, but... hack jack, hack.'''
+    # This is specific. Pick a color
+    if '16_' in k:
+        style_a = 'g'
+        label_a = '16, '
+    elif '49_' in k:
+        style_a = 'b'
+        label_a = '49, '
+    elif '196_' in k:
+        style_a = 'r'
+        label_a = '196, '
+    elif '784_' in k:
+        style_a = 'y'
+        label_a = '784, '
+    else:
+        print('Size unknown!!')
+        style_a = 'b'
+        label_a = '*, '
+    # And style
+    if '0.02' in k:
+        style_b = '^'
+        label_b = '.02 learn, .01 mmnt'
+    elif '0.002' in k:
+        style_b = 's'
+        label_b = '.002 learn, .001 mmnt'
+    elif '0.0002' in k:
+        style_b = 'o'
+        label_b = '.0002 learn, .0001 mmnt'
+    else:
+        print('Learn rate unknown!!')
+        style_b = '--'
+        label_b = '*, *'
+    return((style_a, style_b, '%s%s' %(label_a, label_b)))
+        
 # Optional path to log file, default 'performance.log'
 try:
     logfile = sys.argv[1]
@@ -17,9 +53,13 @@ except IndexError:
 # rate/momentum combos, the values will be lists of tuples, each (x,y) coords.
 with open(logfile, 'r') as fh:
     dct = {}
-    for line in fh.readlines():
+    for linenum, line in enumerate(fh.readlines()): 
         line = line.strip('\n')
         vals = line.split(' ')
+        # Bug workaround because the app registers 0 iterations after going
+        # through the file. 
+        if linenum > 50 and int(vals[4]) < 1:
+            continue
         try:
             dct[vals[0]].append((vals[4], vals[5]))
         except KeyError:
@@ -34,6 +74,7 @@ for k in dct.keys():
     for x, y in dct[k]:
         xdata.append(x)
         ydata.append(y)
-    lab.plot(xdata, ydata, label=k)
+    col, mark, lbl = get_style_color(k)
+    lab.plot(xdata, ydata, color=col, marker=mark, label=lbl)
 lab.legend(loc=4)
 lab.show()
