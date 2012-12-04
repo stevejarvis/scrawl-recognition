@@ -17,13 +17,14 @@ import neuralnet
 import math
 import time
 import threading
+import logging
 
 '''
 The data we have currently is for 28x28 samples, possible dimensions for
 section numbers (and neural net size) are:
 4, 16, 49, 196, 784 total sections.
 '''
-SECTIONS = 196
+SECTIONS = 784
 
 def _two_dimension(pixels):
     ''' Pixels must be a perfect square. Access by twod[y][x] '''
@@ -109,7 +110,7 @@ def get_densities(values):
 
 def _learned(nn, num_sections, count_seen=None):
     ''' Determine if the network knows what's up yet. '''
-    goal = .8
+    goal = .95
     total = 1000
     correct = 0
     with open('./data/test-no-header.csv', 'r') as fh:
@@ -125,7 +126,11 @@ def _learned(nn, num_sections, count_seen=None):
             if int(line[0]) == ans:
                 correct += 1
     percent = float(correct) / float(total)
-    print('%d out of %d. %f percent.' %(correct, total, percent * 100))
+    print('%s %d out of %d. %f percent.' %(threading.current_thread().name,
+                                           correct, total, percent * 100))
+    if count_seen != None:
+        # Log the number of iterations and success rate
+        logging.info('%d %d' %(count_seen, percent * 100))
     return percent >= goal
 
 def _draw_things(screen, pixels, inked):
@@ -153,7 +158,7 @@ def _draw_things(screen, pixels, inked):
                              0)
     pygame.display.flip()
 
-def train(nnet, num_sections, screen):
+def train(nnet, num_sections, screen, learn_rate, mom_rate):
     ''' With chunks of data from the file, train the network. '''
     file_count = 0
     while not _learned(nnet, num_sections):
@@ -182,14 +187,17 @@ def train(nnet, num_sections, screen):
                 data.append((inputs, ans))
                 # When we read in a good chunk of data, train.
                 if line_count % 200 == 0:
-                    nn.train_network(data, 
-                                     change_rate=0.002,
-                                     momentum=0.001, 
+                    nnet.train_network(data, 
+                                     change_rate=learn_rate,
+                                     momentum=mom_rate, 
                                      iters=200)
                     if _learned(nnet, 
                                 num_sections, 
-                                (file_count * line_count + line_count)):
-                        print('Made it!!')
+                                (file_count * 200 + 200)):
+                        print('Made it!! %s' %threading.current_thread().name)
+                        # Better actually save these things!
+                        nnet.save_weights(r'./results/%s_weights.txt' %threading.
+                                        current_thread().name)
                         import sys
                         sys.exit(0)
                     data = []
@@ -209,8 +217,27 @@ if __name__ == '__main__':
     else:
         screen = None
         
-    num_hidden = SECTIONS + 5
-    # Make input 5 neurons larger to add pixel densities to the mix
-    nn = neuralnet.NeuralNetwork(SECTIONS + 5, num_hidden, 10)
+    nnet_sizes = [49, 196, 784]
+    rates = [(0.002,0.001), (0.0005,0.0), (0.0001,0.00005)]
     
-    train(nn, SECTIONS, screen)
+    logging.basicConfig(level=logging.INFO,
+                        format='%(threadName)s %(asctime)s %(levelname)s %(message)s',
+                        datefmt='%m-%d %H:%M',
+                        filename='./results/performance.log',
+                        filemode='w')
+    
+    # Start threads doing magic
+    threads = []
+    for size in nnet_sizes:
+        num_hidden = size + 5
+        for learn, momentum in rates:
+            # Make input 5 neurons larger to add pixel densities to the mix
+            mnn = neuralnet.NeuralNetwork(size + 5, num_hidden, 10)
+            # Start a thread with unique name so we can generate graphs
+            # For each configuration from the log file.
+            t = threading.Thread(target=train,
+                                 name='%d_%f_%f' %(size, learn, momentum),
+                                 args=(mnn, size, screen, learn, momentum))
+            threads.append(t)
+            t.start()
+    print('%d threads doing science.' %len(threads))
