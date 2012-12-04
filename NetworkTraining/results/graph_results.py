@@ -28,15 +28,15 @@ def get_style_color(k):
         style_a = 'b'
         label_a = '*, '
     # And style
-    if '0.02' in k:
+    if '0.2' in k:
         style_b = '^'
-        label_b = '.02 learn, .01 mmnt'
+        label_b = '.2 learn, .1 mmnt'
     elif '0.002' in k:
         style_b = 's'
         label_b = '.002 learn, .001 mmnt'
-    elif '0.0002' in k:
+    elif '0.00002' in k:
         style_b = 'o'
-        label_b = '.0002 learn, .0001 mmnt'
+        label_b = '.00002 learn, .00001 mmnt'
     else:
         print('Learn rate unknown!!')
         style_b = '--'
@@ -56,10 +56,6 @@ with open(logfile, 'r') as fh:
     for linenum, line in enumerate(fh.readlines()): 
         line = line.strip('\n')
         vals = line.split(' ')
-        # Bug workaround because the app registers 0 iterations after going
-        # through the file. 
-        if linenum > 50 and int(vals[4]) < 1:
-            continue
         try:
             dct[vals[0]].append((vals[4], vals[5]))
         except KeyError:

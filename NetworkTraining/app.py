@@ -163,7 +163,7 @@ def train(nnet, num_sections, screen, learn_rate, mom_rate):
     ''' With chunks of data from the file, train the network. '''
     file_count = 0
     # Added the extra file_count check or this test goes forever.
-    while not _learned(nnet, num_sections) and file_count < 1:
+    while file_count < 1 and not _learned(nnet, num_sections):
         print('\n***\nGone through the file %d times.\n***\n' %file_count)
         with open('./data/train-no-header.csv', 'r') as fh:
             data = []
@@ -220,7 +220,7 @@ if __name__ == '__main__':
         screen = None
         
     nnet_sizes = [16, 49, 196, 784]
-    rates = [(0.02, 0.01), (0.002,0.001), (0.0002,0.0001)]
+    rates = [(0.2, 0.1), (0.002,0.001), (0.00002,0.00001)]
     
     logging.basicConfig(level=logging.INFO,
                         format='%(threadName)s %(asctime)s %(levelname)s %(message)s',
