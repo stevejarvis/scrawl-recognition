@@ -219,15 +219,19 @@ def train_that_network(size):
         # random. This came to me in a daydream.
         learn_rate = random.choice([0.02, 0.002, 0.0002])
         mmntm = learn_rate / 2.0
+        yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
             mnn.train_network(data, learn_rate, mmntm, 200)
-            ratio = learned(mnn, size, num_samples=9999)
+            ratio = learned(mnn, size, num_samples=2999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
                 mnn.save_weights(os.path.join(our_root, percent_s))
                 current_best = ratio
                 yell('New best performance! %f percent right. Network size %d, Learning: %f.'
                      %(ratio * 100, size, learn_rate))
+            else:
+                if verbose:
+                    print('Got a measley %f right.' %ratio)
        
 
 if __name__ == '__main__':
