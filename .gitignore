@@ -13,5 +13,5 @@
 
 # Neural net has it's own home
 /NetworkTraining/neuralnet
-/NetworkTraining/results/*.log
-/NetworkTraining/results/*.txt
+/NetworkTraining/results
+/NetworkTraining/.settings
