@@ -1,2 +1,10 @@
 The training makes use of the neural network package (obviously).
 The package can be found here: https://github.com/stevejarvis/neural-network
+
+There seems to be incompatibilities between Python2.7 and Python3.x when it
+comes to "shelving" things. Python3 saves the database with a ".db" extension,
+which will not work with the app. Also, Python3 cannot read database files
+created by Python2.7. Whenever possible I will make this run with either
+interpreter, but because 2.7 is installed on euclid.nmu.edu, where this
+will eventually be run, all incompatibilities like this will be developed
+for 2.7.
