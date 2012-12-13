@@ -218,7 +218,7 @@ def train_that_network(size):
         # To avoid getting stuck from stagnant rates, pick from a couple at
         # random. This came to me in a daydream.
         learn_rate = random.choice([0.02, 0.002, 0.0002])
-        mmntm = learn_rate / 2.0
+        mmntm = learn_rate / random.choice([1.0, 2.0, 3.0])
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
             mnn.train_network(data, learn_rate, mmntm, 200)
@@ -256,11 +256,10 @@ if __name__ == '__main__':
                         nargs=1,
                         help='Train a network. Supply size as argument.\
                         If nothing else is provided, this is required.')
-    # Verbose is an argument, but I made it default on anyway.
     parser.add_argument('-v', '--verbose', 
                         dest='verbose', 
                         action='count',
-                        default=1,
+                        default=0,
                         help='Spam yourself.')
     
     # Process arguments
