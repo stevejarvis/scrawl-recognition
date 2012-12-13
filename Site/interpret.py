@@ -1,4 +1,4 @@
-#!/opt/local/bin/python2
+#!/usr/bin/python
 '''
 Website to which whatever is being drawn on should make requests.
 
@@ -8,31 +8,20 @@ Input: SIZE binary bits representing ink in image, stored in 'sec'.
 Output: json of list of tuples, guess and associated weight.
 '''
 
-from __future__ import print_function
 import cgi
-import logging
 import sys
 import json
-# This is just to get neural-net in path on my dev machine
-sys.path.append('/Users/steve/Dev/neuralnet')
+# Amend path on euclid
+sys.path.append('/home/sjarvis/neural-network')
 import neuralnet
 
 # Number of sections in image we're dealing with.
 SIZE = 196
 # Path to the root of the weights folder. Make sure this exists.
-WEIGHTS_PATH = r'/Users/steve/Dev/scrawl/NetworkTraining/results/%s' %SIZE
+WEIGHTS_PATH = r'/home/sjarvis/scrawl-recognition/NetworkTraining/results/%s' %SIZE
 # Because logging isn't gonna work so well in a real life web server.
 DEBUG = False
-
-if DEBUG:
-    # Set up the logger
-    logpath = './site.log'
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s %(levelname)s %(message)s',
-                        datefmt='%m-%d %H:%M',
-                        filename=logpath,
-                        filemode='a')
-                            
+                           
 # Print Header
 print('Content-type: text/html\n\n')
 
@@ -42,13 +31,16 @@ def find_best_weights(path):
     if len(weights) == 0:
         print('Need to either train or fix weight path.')
         if DEBUG:
-            logging.error('No weights were at the weight path.')
+            print('No weights were at the weight path.')
         sys.exit(0)
     weights.sort()
     weights.reverse()
-    return os.path.join(path, weights[0])
+    weight_path = os.path.join(path, weights[0])
+    if DEBUG:
+        print('found %s' %weight_path)
+    return weight_path
     
-# Could use some error checking here
+# Could use some error checking here...
 g = cgi.FieldStorage()
 sections = list(g['sec'].value)
 data = [int(x) for x in sections]
@@ -56,13 +48,20 @@ for param in ['t','n','s','w','e']:
     data.append(float(g[param].value))
 
 if DEBUG:
-    logging.info('Data seems ok, got data: %s' %data)
+    print('Data seems ok.')
     
 nn = neuralnet.NeuralNetwork(SIZE + 5, SIZE + 5, 10)
-nn.load_weights(find_best_weights(WEIGHTS_PATH))
+try:
+    nn.load_weights(find_best_weights(WEIGHTS_PATH))
+except Exception, e:
+    print('Error! Could not load weights, take blind guess. Error: %s' %e)
+    sys.exit(0)
+
 if DEBUG:
-    logging.info('Weights loaded for %d network.' %SIZE)
+    print('Weights loaded for %d network.' %SIZE)
 res = nn.evaluate(list(data))
 
-output = [(res.index(weight), weight) for weight in res]
-json.dumps(output.sort(key=lambda x: x[1]))
+output = [(index, weight) for index, weight in enumerate(res)]
+output.sort(key=lambda x: x[1])
+output.reverse()
+print(json.dumps(output))
