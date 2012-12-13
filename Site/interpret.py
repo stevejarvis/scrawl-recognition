@@ -25,14 +25,14 @@ WEIGHTS_PATH = r'/Users/steve/Dev/scrawl/NetworkTraining/results/%s' %SIZE
 DEBUG = False
 
 if DEBUG:
-	# Set up the logger
-	logpath = './site.log'
-	logging.basicConfig(level=logging.INFO,
-						format='%(asctime)s %(levelname)s %(message)s',
-						datefmt='%m-%d %H:%M',
-						filename=logpath,
-						filemode='a')
-							
+    # Set up the logger
+    logpath = './site.log'
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(levelname)s %(message)s',
+                        datefmt='%m-%d %H:%M',
+                        filename=logpath,
+                        filemode='a')
+                            
 # Print Header
 print('Content-type: text/html\n\n')
 
@@ -41,8 +41,8 @@ def find_best_weights(path):
     weights = os.listdir(path)
     if len(weights) == 0:
         print('Need to either train or fix weight path.')
-		if DEBUG:
-			logging.error('No weights were at the weight path.')
+        if DEBUG:
+            logging.error('No weights were at the weight path.')
         sys.exit(0)
     weights.sort()
     weights.reverse()
@@ -56,12 +56,12 @@ for param in ['t','n','s','w','e']:
     data.append(float(g[param].value))
 
 if DEBUG:
-	logging.info('Data seems ok, got data: %s' %data)
+    logging.info('Data seems ok, got data: %s' %data)
     
 nn = neuralnet.NeuralNetwork(SIZE + 5, SIZE + 5, 10)
 nn.load_weights(find_best_weights(WEIGHTS_PATH))
 if DEBUG:
-	logging.info('Weights loaded for %d network.' %SIZE)
+    logging.info('Weights loaded for %d network.' %SIZE)
 res = nn.evaluate(list(data))
 
 output = [(res.index(weight), weight) for weight in res]
