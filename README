@@ -1,7 +1,6 @@
 This is a project to recognize handwritten digits by use of a neural network.
 
-This repository contains the Android front end, the Python application used to train
-the network, the Java library used to interpret the input from Android, and any
-other pieces needed to make this work.
+This repository contains the iOS front end, the Python application used to train
+the network and any other pieces needed to make this work...
 
 ... Except the neural network. It has its own repo: https://github.com/stevejarvis/neural-network
