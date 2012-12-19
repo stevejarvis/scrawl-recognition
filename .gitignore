@@ -16,3 +16,7 @@
 /NetworkTraining/neuralnet
 /NetworkTraining/results
 /NetworkTraining/.settings
+
+# Xcode files
+GLPaint/GLPaint.xcodeproj/project.xcworkspace/
+GLPaint/GLPaint.xcodeproj/xcuserdata/
