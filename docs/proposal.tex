@@ -1,0 +1,65 @@
+% Proposal for the features and scoring and stuff of my senior project.
+\documentclass{article}
+\title{Senior Project Proposal}
+\author{Steve Jarvis}
+\date{\today}
+% Disables chapter and section numbering
+\setcounter{secnumdepth}{-1} 
+
+\begin{document}
+\maketitle
+
+% Describe what the project is.
+\section{What It Is...}
+	\paragraph{}The project will be an application to recognize handwritten characters.  The
+	focus and functional block of the project is a neural network and I plan to 
+	design it for universal use, versus tailored specifically for handwriting 
+	recognition.
+	\paragraph{}The network will be continually training on euclid against the MNIST database
+	of handwritten digits\footnote{Info for the MNIST Database can be found at: 
+	yann.lecun.com/exdb/mnist/}. I'll have an iOS front end on which to write, 
+	that will query a web page on euclid and return the results using the best 
+	known weights configuration at the time. It will be constantly improving in 
+	the background, the user will always see the best results possible.
+	\paragraph{}This project will focus specifically on digit recognition (0-9) but including 
+	letters--or any other symbols--would only require an amended data set on which
+	to train and an appropriately scaled neural network.
+	
+% What technologies it uses
+\section{Technologies...}
+	\begin{itemize}
+		\item Python
+		\item Python CGI
+		\item Objective C
+		\item iOS
+		\item JSON
+		\item HTTP
+		\item Calculus\footnote{Maybe not a technology, but first time I’ve used it writing software.}
+		\item \LaTeX\footnote{Not necessary, but using it to write these docs. It's kinda cool.}
+	\end{itemize}
+	
+\section{What I Hope to Learn...}
+	\paragraph{}This is a venture into machine learning, and I hope to learn just that. All the 
+	applications I sent to graduate schools expressed interest in AI and machine learning, but 
+	I don’t yet know how to write anything of substance in the fields. I’m hoping this is a 
+	challenging and meaningful entrance to the subject area.
+
+	\paragraph{}I will learn some iOS development as well.
+
+\section{Points on Points...}
+	\subsection{Neural Network - 15 points}
+		\begin{itemize}
+			\item Scalable size for universal use - 5 pts
+			\item Learn and implement a back-progagated training algorithm - 5 pts
+			\item Option for momentum during training\footnote{Momentum coupled with the
+					learning rate can speed momentum.} - 2 pts
+			\item Use a smooth, symmetrical sigmoidal function to determine activation 
+					(and by extension, its derivative for back-propagation) - 2 pts
+			\item Ability to save/load weights. - 1 pts
+		\end{itemize}
+	\subsection{Network Training App - 12 points}
+		\begin{itemize}
+			\item Automatically store weights when new best performance is achieved - 3 pts
+			\item Automatically load best known weights on start of training - 2 pts
+		\end{itemize}
+\end{document}
