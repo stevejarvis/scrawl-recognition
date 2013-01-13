@@ -27,7 +27,7 @@
 	
 % What technologies it uses
 \section{Technologies...}
-	\begin{itemize}
+	\begin{itemize} \itemsep -2 pt
 		\item Python
 		\item Python CGI
 		\item Objective C
@@ -48,18 +48,43 @@
 
 \section{Points on Points...}
 	\subsection{Neural Network - 15 points}
-		\begin{itemize}
+		\begin{itemize} \itemsep -2 pt
 			\item Scalable size for universal use - 5 pts
 			\item Learn and implement a back-progagated training algorithm - 5 pts
 			\item Option for momentum during training\footnote{Momentum coupled with the
-					learning rate can speed momentum.} - 2 pts
+					learning rate can reduce time for training.} - 2 pts
 			\item Use a smooth, symmetrical sigmoidal function to determine activation 
 					(and by extension, its derivative for back-propagation) - 2 pts
 			\item Ability to save/load weights. - 1 pts
 		\end{itemize}
 	\subsection{Network Training App - 12 points}
-		\begin{itemize}
+		\begin{itemize} \itemsep -2 pt
 			\item Automatically store weights when new best performance is achieved - 3 pts
 			\item Automatically load best known weights on start of training - 2 pts
+			\item Include experimental mode, which will graph performance of various 
+					configurations, to help determine optimal settings of production network - 5 pts
+			\item Option for verbose/silent - 1 pts
+			\item Include a log. Important since running unattended - 1 pts
 		\end{itemize}
+	\subsection{iOS App – 8 pts}
+		\begin{itemize} \itemsep -2 pt
+			\item 3 pts - Automatically recognize a pause in writing and submit the image for recognition.
+			\item 3 pts – Display percent certainty.
+			\item 1 pts - Graceful notification on loss of network.
+			\item 1 pts – Optionally display grid for visual estimate of what data network receives.
+		\end{itemize}
+	\subsection{Web Page – 5 pts}
+		\begin{itemize} \itemsep -2 pt
+			\item 3 pts – Find and load the latest weights after initializing a neural network.
+			\item 2 pts – Output JSON feedback including both guesses and associated certainty.
+		\end{itemize}
+	\subsection{Total - 40 pts}
+	
+\section{Grading...}
+0-20 = Failure \\
+20-24 = D \\
+25-29 = C \\
+30-34 = B \\
+35-40 = A \\
+
 \end{document}
