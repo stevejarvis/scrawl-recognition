@@ -292,6 +292,13 @@
 // Handles the start of a touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // If there's a timer set, cancel it.
+    NSLog(@"Touch began. Timer is %@", touchTimer);
+    if (touchTimer != nil) {
+        [touchTimer invalidate];
+        [touchTimer release];
+    }
+    
 	CGRect				bounds = [self bounds];
     UITouch*	touch = [[event touchesForView:self] anyObject];
 	firstTouch = YES;
@@ -326,15 +333,6 @@
 // Handles the end of a touch event when the touch is a tap.
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // If there's a timer set, cancel it.
-    NSLog(@"Touch Ended. Timer is %@", touchTimer);
-    if (touchTimer != nil) {
-        [touchTimer invalidate];
-        [touchTimer release];
-    } else {
-        NSLog(@"Timer was nil");
-    }
-    
 	CGRect				bounds = [self bounds];
     UITouch*	touch = [[event touchesForView:self] anyObject];
 	if (firstTouch) {
