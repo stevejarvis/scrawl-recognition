@@ -52,6 +52,9 @@
 
 #import "PaintingView.h"
 
+// Constants
+#define waitTime    2.0
+
 //CLASS IMPLEMENTATIONS:
 
 // A class extension to declare private methods
@@ -363,6 +366,15 @@
 // Handles the end of a touch event when the touch is a tap.
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // If there's a timer set, cancel it.
+    NSLog(@"Touch Ended. Timer is %@", touchTimer);
+    if (touchTimer != nil) {
+        [touchTimer invalidate];
+        [touchTimer release];
+    } else {
+        NSLog(@"Timer was nil");
+    }
+    
 	CGRect				bounds = [self bounds];
     UITouch*	touch = [[event touchesForView:self] anyObject];
 	if (firstTouch) {
@@ -371,6 +383,22 @@
 		previousLocation.y = bounds.size.height - previousLocation.y;
 		[self renderLineFromPoint:previousLocation toPoint:location];
 	}
+    
+    // Start a timer. If no touches in time, assume they're done and submit.
+    touchTimer = [[NSTimer scheduledTimerWithTimeInterval:waitTime
+                                                  target:self
+                                                selector:@selector(submitDigit)
+                                                userInfo:nil
+                                                 repeats:NO] retain];
+}
+
+// After touching ends, submit the digit.
+- (void)submitDigit
+{
+    NSLog(@"Sending digit info");
+    
+    [touchTimer release];
+    touchTimer = nil;
 }
 
 // Handles the end of a touch event.

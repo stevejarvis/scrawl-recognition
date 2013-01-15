@@ -81,7 +81,10 @@
 	CGPoint	location;
 	CGPoint	previousLocation;
 	Boolean	firstTouch;
-	Boolean needsErase;	
+	Boolean needsErase;
+    
+    CFTimeInterval lastTouch;
+    NSTimer *touchTimer;
 }
 
 @property(nonatomic, readwrite) CGPoint location;
@@ -89,5 +92,6 @@
 
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
+- (void)submitDigit;
 
 @end
