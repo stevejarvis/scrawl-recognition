@@ -1,0 +1,9 @@
+##GLPaint##
+
+GLPaint is an example painting application from the Apple Developer site. I
+made edits to work for the digit recognition project. In summary, the
+edits are these:
+
+Auto recognize end of writing and submit/get results.
+Auto erase when finished and prepare for new run.
+Add settings for request URL and show grid.
