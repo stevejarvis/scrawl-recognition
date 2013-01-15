@@ -357,6 +357,12 @@
     
     [touchTimer release];
     touchTimer = nil;
+    
+    //TODO send the info to http
+    //TODO get the result and show it
+    
+    // The shake message will dispatch to AppController and clear the screen.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
 }
 
 // Handles the end of a touch event.
