@@ -53,5 +53,7 @@
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
 - (void)submitDigit;
+// A callback for wget
+- (void)receiveData:(NSString *)data;
 
 @end

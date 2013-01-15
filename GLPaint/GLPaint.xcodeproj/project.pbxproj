@@ -27,6 +27,7 @@
 		2D500B940D5A79C200DBA0E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B920D5A79C200DBA0E3 /* OpenGLES.framework */; };
 		2D500B9A0D5A79CF00DBA0E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */; };
 		2D500C820D5A7DAE00DBA0E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */; };
+		AA258ACB16A5D59D006C7A37 /* WebGet.m in Sources */ = {isa = PBXBuildFile; fileRef = AA258ACA16A5D59D006C7A37 /* WebGet.m */; };
 		AF85865410694D4D0004D36B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF85865310694D4D0004D36B /* MainWindow.xib */; };
 		AF858950106977F20004D36B /* PaintingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = AF85894F106977F20004D36B /* PaintingWindow.m */; };
 		AFCEBA2111D96215001AA22A /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA1A11D96215001AA22A /* Icon-72.png */; };
@@ -65,6 +66,8 @@
 		2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* GLPaint-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GLPaint-Info.plist"; sourceTree = "<group>"; };
+		AA258AC916A5D59D006C7A37 /* WebGet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebGet.h; path = Classes/WebGet.h; sourceTree = "<group>"; };
+		AA258ACA16A5D59D006C7A37 /* WebGet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebGet.m; path = Classes/WebGet.m; sourceTree = "<group>"; };
 		AF85865310694D4D0004D36B /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		AF85894E106977F20004D36B /* PaintingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaintingWindow.h; path = Classes/PaintingWindow.h; sourceTree = "<group>"; };
 		AF85894F106977F20004D36B /* PaintingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaintingWindow.m; path = Classes/PaintingWindow.m; sourceTree = "<group>"; };
@@ -173,6 +176,8 @@
 				1B8CA30D0DC8E3A4002C657A /* PaintingView.m */,
 				1B8CA30E0DC8E3A4002C657A /* SoundEffect.h */,
 				1B8CA30F0DC8E3A4002C657A /* SoundEffect.m */,
+				AA258AC916A5D59D006C7A37 /* WebGet.h */,
+				AA258ACA16A5D59D006C7A37 /* WebGet.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				1B8CA3130DC8E3A4002C657A /* PaintingView.m in Sources */,
 				1B8CA3140DC8E3A4002C657A /* SoundEffect.m in Sources */,
 				AF858950106977F20004D36B /* PaintingWindow.m in Sources */,
+				AA258ACB16A5D59D006C7A37 /* WebGet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

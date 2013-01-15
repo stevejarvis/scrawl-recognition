@@ -11,6 +11,7 @@
 #import <OpenGLES/EAGLDrawable.h>
 
 #import "PaintingView.h"
+#import "WebGet.h"
 
 // Constants
 #define waitTime    2.0
@@ -350,21 +351,6 @@
                                                  repeats:NO] retain];
 }
 
-// After touching ends, submit the digit.
-- (void)submitDigit
-{
-    NSLog(@"Sending digit info");
-    
-    [touchTimer release];
-    touchTimer = nil;
-    
-    //TODO send the info to http
-    //TODO get the result and show it
-    
-    // The shake message will dispatch to AppController and clear the screen.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
-}
-
 // Handles the end of a touch event.
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -379,6 +365,29 @@
 			  green * kBrushOpacity,
 			  blue	* kBrushOpacity,
 			  kBrushOpacity);
+}
+
+// Get the response from WebGet and display it proudly. Then erase screen.
+- (void)receiveData:(NSString *)data
+{
+    NSLog(@"Listener got data %@", data);
+    
+    // The shake message will dispatch to AppController and clear the screen.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
+}
+
+// After touching ends, submit the digit.
+- (void)submitDigit
+{
+    NSLog(@"Sending digit info");
+    
+    [touchTimer release];
+    touchTimer = nil;
+    
+    WebGet *wget = [[WebGet alloc] initWithUrl:@"http://cs.nmu.edu/~sjarvis/interpret.py?sec=0000000000000000000000000000000000010000000000111110000000001111100000000011011000000000000110000000000011000000000001110000000000111000000000001111111100000001111100000000000000000000000000000000&t=3.0357142857142856&n=0.7270408163265306&s=0.7908163265306123&w=0.7397959183673469&e=0.778061224489796"
+                                      callMeMaybe:self];
+    // We can release wget, it will call us later maybe.
+    [wget release];
 }
 
 @end
