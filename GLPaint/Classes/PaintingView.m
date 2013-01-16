@@ -122,10 +122,12 @@
 		// Make sure to start with a cleared buffer
 		needsErase = YES;
 		
+        /*
 		// Playback recorded path, which is "Shake Me"
 		recordedPaths = [NSMutableArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Recording" ofType:@"data"]];
 		if([recordedPaths count])
 			[self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
+        */
 	}
 	
 	return self;
