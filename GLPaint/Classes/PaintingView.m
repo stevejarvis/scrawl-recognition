@@ -371,7 +371,24 @@
 - (void)receiveData:(NSString *)data
 {
     NSLog(@"Listener got data %@", data);
+        
+    // Hide our progress bar
+    [aSpinner stopAnimating];
+    [aSpinner release];
     
+    // TODO actually do something interesting with the data?
+    // Show the answers!
+    UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"It looks like a..."
+                                                     message:[NSString stringWithFormat:@"%c", [data characterAtIndex:3]]
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cool"
+                                           otherButtonTitles:nil] autorelease];
+    [alert show];
+}
+
+// Called by the system when UIAlertView is dismissed.
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
     // The shake message will dispatch to AppController and clear the screen.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
 }
@@ -384,10 +401,18 @@
     [touchTimer release];
     touchTimer = nil;
     
+    // TODO obvi this is just for testing purposes. This URL needs to be generated dynamically.
     WebGet *wget = [[WebGet alloc] initWithUrl:@"http://cs.nmu.edu/~sjarvis/interpret.py?sec=0000000000000000000000000000000000010000000000111110000000001111100000000011011000000000000110000000000011000000000001110000000000111000000000001111111100000001111100000000000000000000000000000000&t=3.0357142857142856&n=0.7270408163265306&s=0.7908163265306123&w=0.7397959183673469&e=0.778061224489796"
                                       callMeMaybe:self];
-    // We can release wget, it will call us later maybe.
+    // We can release wget, it will call us later maybe. At self.receiveData.
     [wget release];
+    
+    // Make a progress bar, say we're going.
+    aSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                UIActivityIndicatorViewStyleWhiteLarge];
+    [self addSubview:aSpinner];
+    [aSpinner setCenter:self.center];
+    [aSpinner startAnimating];
 }
 
 @end

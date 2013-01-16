@@ -45,6 +45,8 @@
     
     CFTimeInterval lastTouch;
     NSTimer *touchTimer;
+    
+    UIActivityIndicatorView   *aSpinner; 
 }
 
 @property(nonatomic, readwrite) CGPoint location;
