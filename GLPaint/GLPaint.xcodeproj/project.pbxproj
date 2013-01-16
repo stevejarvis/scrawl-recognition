@@ -28,6 +28,7 @@
 		2D500B9A0D5A79CF00DBA0E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */; };
 		2D500C820D5A7DAE00DBA0E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */; };
 		AA258ACB16A5D59D006C7A37 /* WebGet.m in Sources */ = {isa = PBXBuildFile; fileRef = AA258ACA16A5D59D006C7A37 /* WebGet.m */; };
+		AA258ACD16A63C5F006C7A37 /* ScrawlParticle.png in Resources */ = {isa = PBXBuildFile; fileRef = AA258ACC16A63C5F006C7A37 /* ScrawlParticle.png */; };
 		AF85865410694D4D0004D36B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF85865310694D4D0004D36B /* MainWindow.xib */; };
 		AF858950106977F20004D36B /* PaintingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = AF85894F106977F20004D36B /* PaintingWindow.m */; };
 		AFCEBA2111D96215001AA22A /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA1A11D96215001AA22A /* Icon-72.png */; };
@@ -68,6 +69,7 @@
 		8D1107310486CEB800E47090 /* GLPaint-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GLPaint-Info.plist"; sourceTree = "<group>"; };
 		AA258AC916A5D59D006C7A37 /* WebGet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebGet.h; path = Classes/WebGet.h; sourceTree = "<group>"; };
 		AA258ACA16A5D59D006C7A37 /* WebGet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebGet.m; path = Classes/WebGet.m; sourceTree = "<group>"; };
+		AA258ACC16A63C5F006C7A37 /* ScrawlParticle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScrawlParticle.png; sourceTree = "<group>"; };
 		AF85865310694D4D0004D36B /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		AF85894E106977F20004D36B /* PaintingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaintingWindow.h; path = Classes/PaintingWindow.h; sourceTree = "<group>"; };
 		AF85894F106977F20004D36B /* PaintingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaintingWindow.m; path = Classes/PaintingWindow.m; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AA258ACC16A63C5F006C7A37 /* ScrawlParticle.png */,
 				AFCEBA1A11D96215001AA22A /* Icon-72.png */,
 				AFCEBA1B11D96215001AA22A /* Icon-Small-50.png */,
 				AFCEBA1C11D96215001AA22A /* Icon-Small.png */,
@@ -246,6 +249,7 @@
 				AFCEBA2511D96215001AA22A /* Icon.png in Resources */,
 				AFCEBA2611D96215001AA22A /* Icon@2x.png in Resources */,
 				AFCEBA2711D96215001AA22A /* iTunesArtwork in Resources */,
+				AA258ACD16A63C5F006C7A37 /* ScrawlParticle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

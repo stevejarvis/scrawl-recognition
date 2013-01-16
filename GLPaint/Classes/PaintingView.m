@@ -64,7 +64,7 @@
 		
 		// Create a texture from an image
 		// First create a UIImage object from the data in a image file, and then extract the Core Graphics image
-		brushImage = [UIImage imageNamed:@"Particle.png"].CGImage;
+		brushImage = [UIImage imageNamed:@"ScrawlParticle.png"].CGImage;
 		
 		// Get the width and height of the image
 		width = CGImageGetWidth(brushImage);
