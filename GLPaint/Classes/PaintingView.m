@@ -41,7 +41,7 @@
 // The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
 	
-	NSMutableArray*	recordedPaths;
+	//NSMutableArray*	recordedPaths;
 	CGImageRef		brushImage;
 	CGContextRef	brushContext;
 	GLubyte			*brushData;
@@ -103,8 +103,10 @@
 		CGRect frame = self.bounds;
 		CGFloat scale = self.contentScaleFactor;
 		// Setup the view port in Pixels
-		glOrthof(0, frame.size.width * scale, 0, frame.size.height * scale, -1, 1);
-		glViewport(0, 0, frame.size.width * scale, frame.size.height * scale);
+        // Want a square drawing area, offset centers it vertically.
+        NSInteger offset = 50;
+		glOrthof(0, frame.size.width * scale, offset, frame.size.width * scale + offset, -1, 1);
+		glViewport(0, offset, frame.size.width * scale, frame.size.width * scale);
 		glMatrixMode(GL_MODELVIEW);
 		
 		glDisable(GL_DITHER);
