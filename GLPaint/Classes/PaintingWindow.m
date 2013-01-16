@@ -15,11 +15,14 @@
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-	if (motion == UIEventSubtypeMotionShake )
+	// Don't want to erase on shake any more.
+    /*
+    if (motion == UIEventSubtypeMotionShake )
 	{
 		// User was shaking the device. Post a notification named "shake".
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
 	}
+    */
 }
 
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
