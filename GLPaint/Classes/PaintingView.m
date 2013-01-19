@@ -103,9 +103,15 @@
 		CGRect frame = self.bounds;
 		CGFloat scale = self.contentScaleFactor;
 		// Setup the view port in Pixels
-        // Want a square drawing area, offset centers it vertically.
-        NSInteger offset = 50;
+        NSLog(@"Dimensions of drawing surface will be %f squared.", frame.size.width);
+        // Center the square view dynamically.
+        NSInteger offset = (frame.size.height - frame.size.width) / 2;
+        drawingBounds = [[NSArray arrayWithObjects:[NSNumber numberWithInt:0],
+                                                [NSNumber numberWithFloat:offset + frame.size.width],
+                                                [NSNumber numberWithFloat:frame.size.width],
+                                                nil] retain];
 		glOrthof(0, frame.size.width * scale, offset, frame.size.width * scale + offset, -1, 1);
+        // glViewport is (x, y, width, height)
 		glViewport(0, offset, frame.size.width * scale, frame.size.width * scale);
 		glMatrixMode(GL_MODELVIEW);
 		
@@ -200,6 +206,7 @@
 // Releases resources when they are not longer needed.
 - (void) dealloc
 {
+    [drawingBounds release];
 	if (brushTexture)
 	{
 		glDeleteTextures(1, &brushTexture);
@@ -329,8 +336,17 @@
 	    location.y = bounds.size.height - location.y;
 		previousLocation = [touch previousLocationInView:self];
 		previousLocation.y = bounds.size.height - previousLocation.y;
+        
+        // If the touch is within our square's bounds, remember it.
+        NSInteger topBounds = [[drawingBounds objectAtIndex:1] integerValue];
+        if (location.y < topBounds && location.y > (topBounds - [[drawingBounds objectAtIndex:2] integerValue]))
+        {
+            NSLog(@"Word");
+        } else {
+            NSLog(@"Don't count it");
+        }
 	}
-		
+    
 	// Render the stroke
 	[self renderLineFromPoint:previousLocation toPoint:location];
 }
