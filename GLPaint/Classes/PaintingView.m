@@ -30,6 +30,7 @@
 
 @synthesize  location;
 @synthesize  previousLocation;
+@synthesize  inkTouches;
 
 // Implement this to override the default layer class (which is [CALayer class]).
 // We do this so that our view will be backed by a layer that is capable of OpenGL ES rendering.
@@ -207,6 +208,7 @@
 - (void) dealloc
 {
     [drawingBounds release];
+    [self.inkTouches release];
 	if (brushTexture)
 	{
 		glDeleteTextures(1, &brushTexture);
@@ -341,10 +343,8 @@
         NSInteger topBounds = [[drawingBounds objectAtIndex:1] integerValue];
         if (location.y < topBounds && location.y > (topBounds - [[drawingBounds objectAtIndex:2] integerValue]))
         {
-            NSLog(@"Word");
-        } else {
-            NSLog(@"Don't count it");
-        }
+            [self.inkTouches addObject:[NSArray arrayWithObjects:[NSNumber numberWithInt:location.x],[NSNumber numberWithInt:location.y],nil]];
+        } 
 	}
     
 	// Render the stroke
@@ -421,12 +421,17 @@
     [touchTimer release];
     touchTimer = nil;
     
+    //Build the URL.
+    NSString *destUrl = [WebGet generateUrl:inkTouches];
+    //Clear the touches list.
+    [inkTouches removeAllObjects];
+    
     // TODO obvi this is just for testing purposes. This URL needs to be generated dynamically.
-    WebGet *wget = [[WebGet alloc] initWithUrl:@"http://cs.nmu.edu/~sjarvis/interpret.py?sec=0000000000000000000000000000000000010000000000111110000000001111100000000011011000000000000110000000000011000000000001110000000000111000000000001111111100000001111100000000000000000000000000000000&t=3.0357142857142856&n=0.7270408163265306&s=0.7908163265306123&w=0.7397959183673469&e=0.778061224489796"
-                                      callMeMaybe:self];
+    WebGet *wget = [[WebGet alloc] initWithUrl:destUrl
+                                   callMeMaybe:self];
     // We can release wget, it will call us later maybe. At self.receiveData.
     [wget release];
-    
+        
     // Make a progress bar, say we're going.
     aSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                 UIActivityIndicatorViewStyleWhiteLarge];
