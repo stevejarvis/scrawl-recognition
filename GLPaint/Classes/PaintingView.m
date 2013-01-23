@@ -341,9 +341,10 @@
         
         // If the touch is within our square's bounds, remember it.
         NSInteger topBounds = [[drawingBounds objectAtIndex:1] integerValue];
-        if (location.y < topBounds && location.y > (topBounds - [[drawingBounds objectAtIndex:2] integerValue]))
+        NSInteger offset = [[drawingBounds objectAtIndex:2] integerValue];
+        if (location.y < topBounds && location.y > (topBounds - offset))
         {
-            [self.inkTouches addObject:[NSArray arrayWithObjects:[NSNumber numberWithInt:location.x],[NSNumber numberWithInt:location.y],nil]];
+            [self.inkTouches addObject:[NSArray arrayWithObjects:[NSNumber numberWithInt:location.x],[NSNumber numberWithInt:location.y - offset],nil]];
         } 
 	}
     
@@ -422,7 +423,8 @@
     touchTimer = nil;
     
     //Build the URL.
-    NSString *destUrl = [WebGet generateUrl:inkTouches];
+    NSString *destUrl = [WebGet generateUrl:inkTouches
+                                  dimension:[[drawingBounds objectAtIndex:2] integerValue]];
     //Clear the touches list.
     [inkTouches removeAllObjects];
     

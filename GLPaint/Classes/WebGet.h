@@ -15,6 +15,6 @@
 }
 
 -(id)initWithUrl:(NSString *)urlString callMeMaybe:(NSObject *)list;
-+(NSString *)generateUrl:(NSMutableArray *)xyTouches;
++(NSString *)generateUrl:(NSMutableArray *)xyTouches dimension:(NSInteger)size;
 
 @end
