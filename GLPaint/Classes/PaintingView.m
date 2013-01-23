@@ -12,6 +12,7 @@
 
 #import "PaintingView.h"
 #import "WebGet.h"
+#import "ImageUtils.h"
 
 // Constants
 #define waitTime    2.0
@@ -423,8 +424,8 @@
     touchTimer = nil;
     
     //Build the URL.
-    NSString *destUrl = [WebGet generateUrl:inkTouches
-                                  dimension:[[drawingBounds objectAtIndex:2] integerValue]];
+    NSString *destUrl = [ImageUtils generateUrl:inkTouches
+                                      dimension:[[drawingBounds objectAtIndex:2] integerValue]];
     //Clear the touches list.
     [inkTouches removeAllObjects];
     

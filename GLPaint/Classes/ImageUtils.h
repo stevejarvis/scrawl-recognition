@@ -10,4 +10,6 @@
 
 @interface ImageUtils : NSObject
 
++(NSString *)generateUrl:(NSMutableArray *)xyTouches dimension:(NSInteger)size;
+
 @end
