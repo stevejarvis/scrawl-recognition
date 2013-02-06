@@ -48,14 +48,13 @@
     
     UIActivityIndicatorView   *aSpinner;
     
-    // left x, top y, dimension.
-    NSArray *drawingBounds;
-    NSMutableArray *whereTheInkIs;
+    int offset;
+    int dimension;
 }
 
 @property(nonatomic, readwrite) CGPoint location;
 @property(nonatomic, readwrite) CGPoint previousLocation;
-@property(retain, readwrite) NSMutableArray *inkTouches;
+@property(retain, readwrite) NSMutableString *inkTouches;
 
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;

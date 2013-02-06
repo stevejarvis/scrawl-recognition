@@ -107,11 +107,8 @@
 		// Setup the view port in Pixels
         NSLog(@"Dimensions of drawing surface will be %f squared.", frame.size.width);
         // Center the square view dynamically.
-        NSInteger offset = (frame.size.height - frame.size.width) / 2;
-        drawingBounds = [[NSArray arrayWithObjects:[NSNumber numberWithInt:0],
-                                                [NSNumber numberWithFloat:offset + frame.size.width],
-                                                [NSNumber numberWithFloat:frame.size.width],
-                                                nil] retain];
+        offset = (frame.size.height - frame.size.width) / 2;
+        dimension = frame.size.width;
 		glOrthof(0, frame.size.width * scale, offset, frame.size.width * scale + offset, -1, 1);
         // glViewport is (x, y, width, height)
 		glViewport(0, offset, frame.size.width * scale, frame.size.width * scale);
@@ -139,6 +136,13 @@
 			[self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
         */
 	}
+    
+    // Init inkTouches
+    int numberOfPixels = dimension * dimension;
+    self.inkTouches = [[NSMutableString alloc] initWithCapacity:numberOfPixels];
+    for (int i=0; i<numberOfPixels; i++) {
+        [self.inkTouches appendString:@"0"];
+    }
 	
 	return self;
 }
@@ -208,7 +212,7 @@
 // Releases resources when they are not longer needed.
 - (void) dealloc
 {
-    [drawingBounds release];
+    // TODO release offset and dimension
     [self.inkTouches release];
 	if (brushTexture)
 	{
@@ -341,11 +345,14 @@
 		previousLocation.y = bounds.size.height - previousLocation.y;
         
         // If the touch is within our square's bounds, remember it.
-        NSInteger topBounds = [[drawingBounds objectAtIndex:1] integerValue];
-        NSInteger offset = [[drawingBounds objectAtIndex:2] integerValue];
-        if (location.y < topBounds && location.y > (topBounds - offset))
+        int topBounds = offset + dimension;
+        if (location.y < topBounds && location.y > offset)
         {
-            [self.inkTouches addObject:[NSArray arrayWithObjects:[NSNumber numberWithInt:location.x],[NSNumber numberWithInt:location.y - offset],nil]];
+            // For GL, 0,0 is bottom left, but for neural net it's top left. So flip y now.
+            int realY = dimension - (location.y - offset);
+            int targetCharIndex = (realY * dimension) + location.x;
+            //NSAssert(targetCharIndex < [self.inkTouches length], @"Target character index larger than string");
+            [self.inkTouches replaceCharactersInRange:NSMakeRange(targetCharIndex, 1) withString:@"1"];
         } 
 	}
     
@@ -423,24 +430,24 @@
     [touchTimer release];
     touchTimer = nil;
     
-    //Build the URL.
-    NSString *destUrl = [ImageUtils generateUrl:inkTouches
-                                      dimension:[[drawingBounds objectAtIndex:2] integerValue]];
-    //Clear the touches list.
-    [inkTouches removeAllObjects];
-    
-    // TODO obvi this is just for testing purposes. This URL needs to be generated dynamically.
-    WebGet *wget = [[WebGet alloc] initWithUrl:destUrl
-                                   callMeMaybe:self];
-    // We can release wget, it will call us later maybe. At self.receiveData.
-    [wget release];
-        
     // Make a progress bar, say we're going.
     aSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                 UIActivityIndicatorViewStyleWhiteLarge];
     [self addSubview:aSpinner];
     [aSpinner setCenter:self.center];
     [aSpinner startAnimating];
+    
+    //Build the URL.
+    // TODO this should be threaded
+    NSString *destUrl = [ImageUtils generateUrl:self.inkTouches
+                                      dimension:dimension];
+    //Clear the touches list.
+    [self.inkTouches removeAllObjects];
+    
+    WebGet *wget = [[WebGet alloc] initWithUrl:destUrl
+                                   callMeMaybe:self];
+    // We can release wget, it will call us later maybe. At self.receiveData.
+    [wget release];
 }
 
 @end
