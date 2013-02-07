@@ -333,6 +333,7 @@
 	CGRect				bounds = [self bounds];
 	UITouch*			touch = [[event touchesForView:self] anyObject];
 		
+    NSLog(@"Touch moved");
 	// Convert touch point from UIView referential to OpenGL one (upside-down flip)
 	if (firstTouch) {
 		firstTouch = NO;
@@ -352,12 +353,14 @@
             int realY = dimension - (location.y - offset);
             int targetCharIndex = (realY * dimension) + location.x;
             //NSAssert(targetCharIndex < [self.inkTouches length], @"Target character index larger than string");
+            NSLog(@"%@", NSStringFromClass([self.inkTouches class]));
             [self.inkTouches replaceCharactersInRange:NSMakeRange(targetCharIndex, 1) withString:@"1"];
-        } 
+        }
 	}
     
 	// Render the stroke
 	[self renderLineFromPoint:previousLocation toPoint:location];
+    NSLog(@"Made it to the end");
 }
 
 // Handles the end of a touch event when the touch is a tap.
@@ -439,10 +442,19 @@
     
     //Build the URL.
     // TODO this should be threaded
-    NSString *destUrl = [ImageUtils generateUrl:self.inkTouches
+    ImageUtils *iutils = [ImageUtils alloc];
+    NSString *destUrl = [iutils generateUrl:self.inkTouches
                                       dimension:dimension];
+    [iutils release];
+    NSLog(@"inkTOuches is length: %d", [self.inkTouches length]);
     //Clear the touches list.
-    [self.inkTouches removeAllObjects];
+    [self.inkTouches replaceOccurrencesOfString:@"1"
+                                     withString:@"0"
+                                        options:NULL
+                                          range:NSMakeRange(0, [self.inkTouches length])];
+    // Don't know why this is necessary, but without it, after the 2nd drawing, the
+    // string changes to immutable.
+    self.inkTouches = [self.inkTouches mutableCopy];
     
     WebGet *wget = [[WebGet alloc] initWithUrl:destUrl
                                    callMeMaybe:self];
