@@ -11,11 +11,13 @@
 @interface ImageUtils : NSObject
 {
     int dimension;
+    int numOfSections;
 }
 
 @property(retain) NSMutableString *pixelRep;
 
--(NSString *)generateUrl:(NSMutableString *)xyTouches dimension:(int)size;
+-(id)initWithSize:(int)size numberOfSections:(int)numSections pixelData:(NSMutableString *)pixelData;
+-(NSString *)generateUrl;
 -(NSString *)sectionsAsInk;
 -(BOOL)sectionNumberContainsInk:(int)sectionNum;
 -(NSString *)getDensities;

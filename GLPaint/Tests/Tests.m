@@ -7,6 +7,7 @@
 //
 
 #import "Tests.h"
+#import "ImageUtils.h"
 
 @implementation Tests
 
@@ -24,9 +25,13 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testSectionsAsInk
 {
-    STFail(@"Unit tests are not implemented yet in Tests");
+    NSMutableString *pixels = [NSMutableString stringWithString:@"1000000000000000000000001"];
+    ImageUtils *iutils = [[ImageUtils alloc] initWithSize:5
+                                         numberOfSections:25
+                                                pixelData:pixels];
+
 }
 
 @end

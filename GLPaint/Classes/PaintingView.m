@@ -439,9 +439,10 @@
     
     //Build the URL.
     // TODO this should be threaded
-    ImageUtils *iutils = [ImageUtils alloc];
-    NSString *destUrl = [iutils generateUrl:self.inkTouches
-                                      dimension:dimension];
+    ImageUtils *iutils = [[ImageUtils alloc] initWithSize:dimension
+                                         numberOfSections:196
+                                                pixelData:self.inkTouches];
+    NSString *destUrl = [iutils generateUrl];
     [iutils release];
     //Clear the touches list.
     [self.inkTouches replaceOccurrencesOfString:@"1"

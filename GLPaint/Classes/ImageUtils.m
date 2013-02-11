@@ -8,24 +8,27 @@
 
 #import "ImageUtils.h"
 
-//CONSTANTS:
-
-#define numOfSections   196
-
-
 @implementation ImageUtils
 
 @synthesize pixelRep;
 
+-(id)initWithSize:(int)size numberOfSections:(int)numSections pixelData:(NSMutableString *)pixelData
+{
+    self = [super init];
+    pixelRep = pixelData;
+    dimension = size;
+    numOfSections = numSections;
+    return self;
+}
+
 // Passed a mutable string of 1's and 0's representing a touch per pixel. Size is
 // the number of pixels in one dimension.
--(NSString *)generateUrl:(NSMutableString *)xyTouches dimension:(int)size
+-(NSString *)generateUrl
 {
     self = [super init];
     
     NSLog(@"Generating URL!");
-    pixelRep = xyTouches;
-    dimension = size;
+    
     NSString *inkRep = [self sectionsAsInk];
     NSString *densities = [self getDensities];
     NSString *url = [NSString stringWithFormat:@"http://cs.nmu.edu/~sjarvis/interpret.py?sec=%@&%@", inkRep, densities];
