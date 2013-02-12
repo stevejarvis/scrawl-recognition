@@ -397,7 +397,7 @@
 }
 
 // Get the response from WebGet and display it proudly. Then erase screen.
-- (void)receiveData:(NSString *)data
+- (void)receiveData:(NSData *)data
 {
     NSLog(@"Listener got data %@", data);
         
@@ -405,10 +405,14 @@
     [aSpinner stopAnimating];
     [aSpinner release];
     
+    NSError *e = nil;
+    NSArray *jsonResponse = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
+    NSLog(@"%@", jsonResponse);
+    NSNumber *answer = [[jsonResponse objectAtIndex:0] objectAtIndex:0];
     // TODO actually do something interesting with the data?
     // Show the answers!
     UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"It looks like a..."
-                                                     message:[NSString stringWithFormat:@"%c", [data characterAtIndex:3]]
+                                                     message:[NSString stringWithFormat:@"%@", answer]
                                                     delegate:self
                                            cancelButtonTitle:@"Cool"
                                            otherButtonTitles:nil] autorelease];

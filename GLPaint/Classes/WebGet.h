@@ -10,7 +10,6 @@
 
 @interface WebGet : NSObject {
     NSMutableData *receivedData;
-    NSString *dataString;
     NSObject *listener;
 }
 

@@ -67,13 +67,10 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"Succeeded! Received %d bytes of data",[receivedData length]);
-    dataString = [[NSString alloc] initWithData:receivedData
-                                       encoding:NSASCIIStringEncoding];
-    [listener receiveData:dataString];
+    [listener receiveData:receivedData];
     // release the connection, and the data object
     [connection release];
     [receivedData release];
-    [dataString release];
 }
 
 @end
