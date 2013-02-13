@@ -13,9 +13,11 @@
 #import "PaintingView.h"
 #import "WebGet.h"
 #import "ImageUtils.h"
+#import "GridView.h"
 
 // Constants
 #define waitTime    2.0
+#define numSections 196
 
 //CLASS IMPLEMENTATIONS:
 
@@ -32,6 +34,8 @@
 @synthesize  location;
 @synthesize  previousLocation;
 @synthesize  inkTouches;
+@synthesize  grid;
+@synthesize  gridView;
 
 // Implement this to override the default layer class (which is [CALayer class]).
 // We do this so that our view will be backed by a layer that is capable of OpenGL ES rendering.
@@ -129,21 +133,19 @@
 		// Make sure to start with a cleared buffer
 		needsErase = YES;
 		
-        /*
-		// Playback recorded path, which is "Shake Me"
-		recordedPaths = [NSMutableArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Recording" ofType:@"data"]];
-		if([recordedPaths count])
-			[self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.2];
-        */
+        // Init inkTouches
+        int numberOfPixels = dimension * dimension;
+        self.inkTouches = [[NSMutableString alloc] initWithCapacity:numberOfPixels];
+        for (int i=0; i<numberOfPixels; i++) {
+            [self.inkTouches appendString:@"0"];
+        }
+
+        self.gridView = [[GridView alloc] initWithFrame:CGRectMake(0, offset, dimension, dimension)];
+        [self.gridView setSections:numSections];
+        [self gridVisible:true];
+        [self addSubview:self.gridView];
 	}
     
-    // Init inkTouches
-    int numberOfPixels = dimension * dimension;
-    self.inkTouches = [[NSMutableString alloc] initWithCapacity:numberOfPixels];
-    for (int i=0; i<numberOfPixels; i++) {
-        [self.inkTouches appendString:@"0"];
-    }
-	
 	return self;
 }
 
@@ -214,6 +216,7 @@
 {
     // TODO release offset and dimension
     [self.inkTouches release];
+    [self.gridView release];
 	if (brushTexture)
 	{
 		glDeleteTextures(1, &brushTexture);
@@ -289,22 +292,13 @@
 	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
 
-// Reads previously recorded points and draws them onscreen. This is the Shake Me message that appears when the application launches.
-- (void) playback:(NSMutableArray*)recordedPaths
+
+
+- (void)gridVisible:(BOOL)isVisible
 {
-	NSData*				data = [recordedPaths objectAtIndex:0];
-	CGPoint*			point = (CGPoint*)[data bytes];
-	NSUInteger			count = [data length] / sizeof(CGPoint),
-						i;
-	
-	// Render the current path
-	for(i = 0; i < count - 1; ++i, ++point)
-		[self renderLineFromPoint:*point toPoint:*(point + 1)];
-	
-	// Render the next path after a short delay 
-	[recordedPaths removeObjectAtIndex:0];
-	if([recordedPaths count])
-		[self performSelector:@selector(playback:) withObject:recordedPaths afterDelay:0.01];
+    [self.gridView setGridVisible:isVisible];
+    // Will cause redraw.
+    [self.gridView setNeedsDisplay];
 }
 
 
@@ -398,9 +392,7 @@
 
 // Get the response from WebGet and display it proudly. Then erase screen.
 - (void)receiveData:(NSData *)data
-{
-    NSLog(@"Listener got data %@", data);
-        
+{        
     // Hide our progress bar
     [aSpinner stopAnimating];
     [aSpinner release];
@@ -444,7 +436,7 @@
     //Build the URL.
     // TODO this should be threaded
     ImageUtils *iutils = [[ImageUtils alloc] initWithSize:dimension
-                                         numberOfSections:196
+                                         numberOfSections:numSections
                                                 pixelData:self.inkTouches];
     NSString *destUrl = [iutils generateUrl];
     [iutils release];

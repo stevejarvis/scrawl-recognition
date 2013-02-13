@@ -55,11 +55,15 @@
 @property(nonatomic, readwrite) CGPoint location;
 @property(nonatomic, readwrite) CGPoint previousLocation;
 @property(retain, readwrite) NSMutableString *inkTouches;
+@property(retain, nonatomic, readwrite) UIImageView *gridView;
+@property(nonatomic, retain) UIImage *grid;
 
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
 - (void)submitDigit;
 // A callback for wget
 - (void)receiveData:(NSString *)data;
+- (void)gridVisible:(BOOL)isVisible;
+
 
 @end

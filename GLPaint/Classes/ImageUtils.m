@@ -59,12 +59,12 @@
 -(BOOL)sectionNumberContainsInk:(int)sectionNum
 {
     int sectionsPerSide = sqrt(numOfSections);
-    int sectionDimension = floor(dimension / sectionsPerSide);
+    float sectionDimension = dimension / sectionsPerSide;
     int startRow = floor((sectionNum / sectionsPerSide) * sectionDimension);
     int startColumn = floor((sectionNum % sectionsPerSide) * sectionDimension);
-    for (int y = startRow; y < (startRow + sectionDimension); y++)
+    for (int y = startRow; y <= (startRow + sectionDimension); y++)
     {
-        for (int x = startColumn; x < (startColumn + sectionDimension); x++)
+        for (int x = startColumn; x <= (startColumn + sectionDimension); x++)
         {
             if ([self getValueAtX:x y:y] == '1'){
                 return true;
@@ -131,7 +131,6 @@
     east = east / (dimension * dimension / 10);
     
     NSString *ret = [NSString stringWithFormat:@"t=%1.9f&n=%1.9f&s=%1.9f&w=%1.9f&e=%1.9f", total, north, south, west, east];
-    NSLog(@"Dimensions: %@", ret);
     return ret;
 }
 
