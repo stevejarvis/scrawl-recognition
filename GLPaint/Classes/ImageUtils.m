@@ -18,6 +18,7 @@
     pixelRep = pixelData;
     dimension = size;
     numOfSections = numSections;
+    NSAssert(size*size == [pixelRep length], @"Mismatch of pixel data size");
     return self;
 }
 
@@ -52,19 +53,18 @@
         }
     }
     NSAssert([retVal length] == numOfSections, @"The sections as ink section is not %d.", numOfSections);
-    NSLog(@"sectionsAsInk: %@", retVal);
     return retVal;
 }
 
 -(BOOL)sectionNumberContainsInk:(int)sectionNum
 {
     int sectionsPerSide = sqrt(numOfSections);
-    float sectionDimension = dimension / sectionsPerSide;
+    int sectionDimension = dimension / sectionsPerSide;
     int startRow = floor((sectionNum / sectionsPerSide) * sectionDimension);
     int startColumn = floor((sectionNum % sectionsPerSide) * sectionDimension);
-    for (int y = startRow; y <= (startRow + sectionDimension); y++)
+    for (int y = startRow; y < (startRow + sectionDimension); y++)
     {
-        for (int x = startColumn; x <= (startColumn + sectionDimension); x++)
+        for (int x = startColumn; x < (startColumn + sectionDimension); x++)
         {
             if ([self getValueAtX:x y:y] == '1'){
                 return true;

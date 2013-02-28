@@ -11,6 +11,7 @@
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#import "GridView.h"
 
 //CONSTANTS:
 
@@ -49,13 +50,14 @@
     UIActivityIndicatorView   *aSpinner;
     
     int offset;
+    int offsetX;
     int dimension;
 }
 
 @property(nonatomic, readwrite) CGPoint location;
 @property(nonatomic, readwrite) CGPoint previousLocation;
 @property(retain, readwrite) NSMutableString *inkTouches;
-@property(retain, nonatomic, readwrite) UIImageView *gridView;
+@property(retain, nonatomic, readwrite) GridView *gridView;
 @property(nonatomic, retain) UIImage *grid;
 
 - (void)erase;
@@ -63,7 +65,8 @@
 - (void)submitDigit;
 // A callback for wget
 - (void)receiveData:(NSString *)data;
-- (id)toggleGridVisible;
+- (void)toggleGridVisible;
+- (int) maxDimensionForScreenSize:(int)screenWidth;
 
 
 @end

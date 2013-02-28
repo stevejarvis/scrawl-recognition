@@ -68,11 +68,8 @@
 			return nil;
 		}
 		
-		// Create a texture from an image
-		// First create a UIImage object from the data in a image file, and then extract the Core Graphics image
 		brushImage = [UIImage imageNamed:@"ScrawlParticle.png"].CGImage;
 		
-		// Get the width and height of the image
 		width = CGImageGetWidth(brushImage);
 		height = CGImageGetHeight(brushImage);
 		
@@ -87,7 +84,6 @@
 			brushContext = CGBitmapContextCreate(brushData, width, height, 8, width * 4, CGImageGetColorSpace(brushImage), kCGImageAlphaPremultipliedLast);
 			// After you create the context, you can draw the  image to the context.
 			CGContextDrawImage(brushContext, CGRectMake(0.0, 0.0, (CGFloat)width, (CGFloat)height), brushImage);
-			// You don't need the context at this point, so you need to release it to avoid memory leaks.
 			CGContextRelease(brushContext);
 			// Use OpenGL ES to generate a name for the texture.
 			glGenTextures(1, &brushTexture);
@@ -101,7 +97,6 @@
             free(brushData);
 		}
 		
-		// Set the view's scale factor
 		self.contentScaleFactor = 1.0;
 	
 		// Setup OpenGL states
@@ -110,12 +105,14 @@
 		CGFloat scale = self.contentScaleFactor;
 		// Setup the view port in Pixels
         NSLog(@"Dimensions of drawing surface will be %f squared.", frame.size.width);
-        // Center the square view dynamically.
-        offset = (frame.size.height - frame.size.width) / 2;
-        dimension = frame.size.width;
-		glOrthof(0, frame.size.width * scale, offset, frame.size.width * scale + offset, -1, 1);
+        // Center the square view.
+        dimension = [self maxDimensionForScreenSize:frame.size.width];
+        offsetX = (frame.size.width - dimension) / 2;
+        offset = (frame.size.height - dimension) / 2;
+        NSLog(@"dimension: %d offsetX: %d offset: %d", dimension, offsetX, offset);
+		glOrthof(offsetX, dimension * scale, offset, dimension * scale + offset, -1, 1);
         // glViewport is (x, y, width, height)
-		glViewport(0, offset, frame.size.width * scale, frame.size.width * scale);
+		glViewport(offsetX, offset, dimension * scale, dimension * scale);
 		glMatrixMode(GL_MODELVIEW);
 		
 		glDisable(GL_DITHER);
@@ -140,12 +137,19 @@
             [self.inkTouches appendString:@"0"];
         }
 
-        self.gridView = [[GridView alloc] initWithFrame:CGRectMake(0, offset, dimension, dimension)];
+        self.gridView = [[GridView alloc] initWithFrame:CGRectMake(offsetX, offset, dimension, dimension)];
         [self.gridView setSections:numSections];
         [self addSubview:self.gridView];
 	}
     
 	return self;
+}
+
+- (int) maxDimensionForScreenSize:(int)screenWidth
+{
+    // Want an evenly divided grid.
+    int divSize = screenWidth / sqrt(numSections);
+    return divSize * sqrt(numSections);
 }
 
 // If our view is resized, we'll be asked to layout subviews.
@@ -293,7 +297,7 @@
 
 
 
-- (id) toggleGridVisible
+- (void) toggleGridVisible
 {
     [self.gridView setGridIsVisible:![gridView gridIsVisible]];
     // Will cause redraw.
@@ -339,14 +343,16 @@
         
         // If the touch is within our square's bounds, remember it.
         int topBounds = offset + dimension;
-        if (location.y < topBounds && location.y > offset)
+        int rightBounds = offsetX + dimension;
+        if (location.y < topBounds && location.y > offset && location.x > offsetX && location.x < rightBounds)
         {
             // For GL, 0,0 is bottom left, but for neural net it's top left. So flip y now.
             int realY = dimension - (location.y - offset);
-            int targetCharIndex = (realY * dimension) + location.x;
-            //NSAssert(targetCharIndex < [self.inkTouches length], @"Target character index larger than string");
+            int realX = location.x - offsetX;
+            int targetCharIndex = (realY * dimension) + realX;
+            NSAssert(targetCharIndex < (dimension * dimension), @"Target character index larger than string");
             [self.inkTouches replaceCharactersInRange:NSMakeRange(targetCharIndex, 1) withString:@"1"];
-        }
+        } else { NSLog(@"top: %d touch: %f", topBounds, location.y);}
 	}
     
 	// Render the stroke
@@ -433,10 +439,11 @@
     [aSpinner startAnimating];
     
     //Build the URL.
-    // TODO this should be threaded
     ImageUtils *iutils = [[ImageUtils alloc] initWithSize:dimension
                                          numberOfSections:numSections
                                                 pixelData:self.inkTouches];
+    NSAssert([self.inkTouches length] == dimension * dimension,
+             @"Have pixel data length %d, expected %d", [self.inkTouches length], dimension * dimension);
     NSString *destUrl = [iutils generateUrl];
     [iutils release];
     //Clear the touches list.
