@@ -399,10 +399,16 @@
     
     NSError *e = nil;
     NSArray *jsonResponse = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
-    NSNumber *answer = [[jsonResponse objectAtIndex:0] objectAtIndex:0];
+    NSLog(@"response:\n%@", jsonResponse);
+    int answer = [[[jsonResponse objectAtIndex:0] objectAtIndex:0] intValue];
+    float answerCertainty = [[[jsonResponse objectAtIndex:0] objectAtIndex:1] floatValue];
+    int secAnswer = [[[jsonResponse objectAtIndex:1] objectAtIndex:0] intValue];
+    float secAnswerCertainty = [[[jsonResponse objectAtIndex:1] objectAtIndex:1] floatValue];
+    float lastAnswerCertainty = [[[jsonResponse objectAtIndex:9] objectAtIndex:1] floatValue];
+    NSString *message = [NSString stringWithFormat:@"%d  -  %.01f%% probability\n%d  -  %.01f%% probability", answer, (answerCertainty - lastAnswerCertainty) * 50, secAnswer, (secAnswerCertainty - lastAnswerCertainty) * 50];
     // Show the answers!
-    UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"It looks like a..."
-                                                     message:[NSString stringWithFormat:@"%@", answer]
+    UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"It looks like a %d", answer]
+                                                     message:[NSString stringWithFormat:@"%@", message]
                                                     delegate:self
                                            cancelButtonTitle:@"Cool"
                                            otherButtonTitles:nil] autorelease];
