@@ -11,6 +11,6 @@
 @interface GridView : UIView
 
 @property(nonatomic, readwrite) int sections;
-@property(nonatomic, readwrite) BOOL gridVisible;
+@property(nonatomic, readwrite) BOOL gridIsVisible;
 
 @end

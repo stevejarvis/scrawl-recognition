@@ -24,5 +24,6 @@
 
 @property (nonatomic, retain) IBOutlet PaintingWindow *window;
 @property (nonatomic, retain) IBOutlet PaintingView *drawingView;
+- (IBAction)toggleGrid:(id)sender;
 
 @end

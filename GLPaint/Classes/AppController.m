@@ -22,8 +22,6 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication*)application
 {
-	CGRect					rect = [[UIScreen mainScreen] applicationFrame];
-	
     // Defer to the OpenGL view to set the brush color
 	[drawingView setBrushColorWithRed:200 green:200 blue:200];
 	
@@ -64,4 +62,7 @@
 	}
 }
 
+- (IBAction)toggleGrid:(id)sender {
+    [[self drawingView] toggleGridVisible];
+}
 @end

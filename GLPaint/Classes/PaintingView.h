@@ -63,7 +63,7 @@
 - (void)submitDigit;
 // A callback for wget
 - (void)receiveData:(NSString *)data;
-- (void)gridVisible:(BOOL)isVisible;
+- (id)toggleGridVisible;
 
 
 @end

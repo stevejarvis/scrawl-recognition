@@ -142,7 +142,6 @@
 
         self.gridView = [[GridView alloc] initWithFrame:CGRectMake(0, offset, dimension, dimension)];
         [self.gridView setSections:numSections];
-        [self gridVisible:true];
         [self addSubview:self.gridView];
 	}
     
@@ -294,9 +293,9 @@
 
 
 
-- (void)gridVisible:(BOOL)isVisible
+- (id) toggleGridVisible
 {
-    [self.gridView setGridVisible:isVisible];
+    [self.gridView setGridIsVisible:![gridView gridIsVisible]];
     // Will cause redraw.
     [self.gridView setNeedsDisplay];
 }

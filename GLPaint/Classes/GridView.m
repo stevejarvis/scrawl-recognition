@@ -11,22 +11,23 @@
 @implementation GridView
 
 @synthesize sections;
-@synthesize gridVisible;
+@synthesize gridIsVisible;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     [self setBackgroundColor:[UIColor colorWithWhite:3.0 alpha:0.1]];
+    [self setGridIsVisible: true];
     return self;
 }
 
 - (void)drawRect:(CGRect)rect
 {
-    if (self.gridVisible)
+    if (self.gridIsVisible)
     {
         NSLog(@"Drawing the grid");
         CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
+        CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
         CGContextSetLineWidth(context, 2.0);
         
         int dimension = [self frame].size.width;
