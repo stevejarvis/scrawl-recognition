@@ -11,6 +11,7 @@
 @class PaintingWindow;
 @class PaintingView;
 @class SoundEffect;
+@class Reachability;
 
 @interface AppController : NSObject <UIApplicationDelegate>
 {
@@ -20,10 +21,16 @@
 	SoundEffect			*erasingSound;
 	SoundEffect			*selectSound;
 	CFTimeInterval		lastTime;
+    
+    Reachability* reachability;
 }
 
 @property (nonatomic, retain) IBOutlet PaintingWindow *window;
 @property (nonatomic, retain) IBOutlet PaintingView *drawingView;
+@property (retain, nonatomic) IBOutlet UIView *networkStatusIndicator;
 - (IBAction)toggleGrid:(id)sender;
+-(void) networkStatusChanged:(NSNotification *)noti;
+-(void) updateNetworkStatus;
+
 
 @end

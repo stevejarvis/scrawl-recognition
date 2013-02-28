@@ -9,6 +9,7 @@
 #import "AppController.h"
 #import "PaintingView.h"
 #import "SoundEffect.h"
+#import "Reachability.h"
 
 //CONSTANTS:
 
@@ -19,6 +20,7 @@
 
 @synthesize window;
 @synthesize drawingView;
+@synthesize networkStatusIndicator;
 
 - (void) applicationDidFinishLaunching:(UIApplication*)application
 {
@@ -39,6 +41,14 @@
 	// Erase the view when recieving a notification named "shake" from the NSNotificationCenter object
 	// The "shake" nofification is posted by the PaintingWindow object when user shakes the device
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eraseView) name:@"shake" object:nil];
+    
+    // Add observer for network connection changes
+    reachability = [[Reachability reachabilityForInternetConnection] retain];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(networkStatusChanged:)
+                                                 name:kReachabilityChangedNotification object:nil];
+    [reachability startNotifier];
+    [self updateNetworkStatus];
 }
 
 // Release resources when they are no longer needed,
@@ -48,7 +58,8 @@
 	[erasingSound release];
 	[drawingView release];
 	[window release];
-	
+    [networkStatusIndicator release];
+    [reachability release];
 	[super dealloc];
 }
 
@@ -66,4 +77,28 @@
     [[self drawingView] toggleGridVisible];
     [sender setSelected:![sender isSelected]];
 }
+
+-(void) networkStatusChanged:(NSNotification *)noti
+{
+    // The callback for notifications
+    NSLog(@"Got notification for change in network status.");
+    [self updateNetworkStatus];
+}
+
+-(void) updateNetworkStatus
+{
+    NSLog(@"Updating network status.");
+	NetworkStatus ns = [reachability currentReachabilityStatus];
+    
+	if (ns == NotReachable)
+	{
+        NSLog(@"No internet");
+        [drawingView setActiveInternet:false];
+		[[self networkStatusIndicator] setBackgroundColor:[UIColor redColor]];
+	} else {
+        [drawingView setActiveInternet:true];
+        [[self networkStatusIndicator] setBackgroundColor:[UIColor greenColor]];
+    }
+}
+
 @end

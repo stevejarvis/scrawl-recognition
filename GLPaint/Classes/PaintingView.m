@@ -36,6 +36,7 @@
 @synthesize  inkTouches;
 @synthesize  grid;
 @synthesize  gridView;
+@synthesize  activeInternet;
 
 // Implement this to override the default layer class (which is [CALayer class]).
 // We do this so that our view will be backed by a layer that is capable of OpenGL ES rendering.
@@ -415,9 +416,19 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
 }
 
-// After touching ends, submit the digit.
 - (void)submitDigit
 {
+    // After touching ends, submit the digit. If we have an internet connection.
+    if (!self.activeInternet) {
+        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Whoops!"
+                                                         message:[NSString stringWithFormat:@"No Internet."]
+                                                        delegate:self
+                                               cancelButtonTitle:@"Ok"
+                                               otherButtonTitles:nil] autorelease];
+        [alert show];
+        return;
+    }
+    
     NSLog(@"Sending digit info");
     
     [touchTimer release];

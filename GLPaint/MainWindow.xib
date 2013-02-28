@@ -52,7 +52,7 @@
 							<object class="IBUIButton" id="943295094">
 								<reference key="NSNextResponder" ref="773737154"/>
 								<int key="NSvFlags">1316</int>
-								<string key="NSFrame">{{20, 437}, {280, 44}}</string>
+								<string key="NSFrame">{{20, 432}, {280, 44}}</string>
 								<reference key="NSSuperview" ref="773737154"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -94,17 +94,32 @@
 									<int key="NSfFlags">16</int>
 								</object>
 							</object>
+							<object class="IBUIView" id="575573252">
+								<reference key="NSNextResponder" ref="773737154"/>
+								<int key="NSvFlags">1316</int>
+								<string key="NSFrame">{{31, 475}, {259, 5}}</string>
+								<reference key="NSSuperview" ref="773737154"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="943295094"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+									<object class="NSColorSpace" key="NSCustomColorSpace" id="457438260">
+										<int key="NSID">2</int>
+									</object>
+								</object>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
 						</object>
 						<string key="NSFrameSize">{320, 480}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="943295094"/>
+						<reference key="NSNextKeyView" ref="575573252"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace">
-								<int key="NSID">2</int>
-							</object>
+							<reference key="NSCustomColorSpace" ref="457438260"/>
 						</object>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -152,6 +167,14 @@
 					<int key="connectionID">10</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">networkStatusIndicator</string>
+						<reference key="source" ref="664661524"/>
+						<reference key="destination" ref="575573252"/>
+					</object>
+					<int key="connectionID">19</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">toggleGrid:</string>
 						<reference key="source" ref="943295094"/>
@@ -197,6 +220,7 @@
 						<reference key="object" ref="773737154"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="575573252"/>
 							<reference ref="943295094"/>
 						</object>
 						<reference key="parent" ref="380026005"/>
@@ -211,6 +235,11 @@
 						<reference key="object" ref="943295094"/>
 						<reference key="parent" ref="773737154"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">18</int>
+						<reference key="object" ref="575573252"/>
+						<reference key="parent" ref="773737154"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -223,6 +252,7 @@
 					<string>-2.IBPluginDependency</string>
 					<string>14.IBPluginDependency</string>
 					<string>14.IBUIButtonInspectorSelectedStateConfigurationMetadataKey</string>
+					<string>18.IBPluginDependency</string>
 					<string>2.CustomClassName</string>
 					<string>2.IBAttributePlaceholdersKey</string>
 					<string>2.IBPluginDependency</string>
@@ -239,6 +269,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<real value="2"/>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>PaintingWindow</string>
 					<object class="NSMutableDictionary">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -264,7 +295,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">15</int>
+			<int key="maxID">19</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -288,11 +319,13 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>drawingView</string>
+							<string>networkStatusIndicator</string>
 							<string>window</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>PaintingView</string>
+							<string>UIView</string>
 							<string>PaintingWindow</string>
 						</object>
 					</object>
@@ -301,6 +334,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>drawingView</string>
+							<string>networkStatusIndicator</string>
 							<string>window</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -308,6 +342,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">drawingView</string>
 								<string key="candidateClassName">PaintingView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">networkStatusIndicator</string>
+								<string key="candidateClassName">UIView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">window</string>

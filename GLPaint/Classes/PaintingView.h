@@ -59,6 +59,7 @@
 @property(retain, readwrite) NSMutableString *inkTouches;
 @property(retain, nonatomic, readwrite) GridView *gridView;
 @property(nonatomic, retain) UIImage *grid;
+@property(nonatomic) BOOL *activeInternet;
 
 - (void)erase;
 - (void)setBrushColorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;

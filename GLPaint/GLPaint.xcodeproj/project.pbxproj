@@ -36,6 +36,8 @@
 		AAC0F14A16C4959400103D59 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAC0F14816C4959400103D59 /* InfoPlist.strings */; };
 		AAC0F14D16C4959400103D59 /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC0F14C16C4959400103D59 /* Tests.m */; };
 		AAC0F15616CB3EA400103D59 /* GridView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC0F15516CB3EA400103D59 /* GridView.m */; };
+		AAE9950216DFABF3004EF7AF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE9950116DFABF3004EF7AF /* Reachability.m */; };
+		AAE9950416DFB90C004EF7AF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAE9950316DFB90C004EF7AF /* SystemConfiguration.framework */; };
 		AF85865410694D4D0004D36B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF85865310694D4D0004D36B /* MainWindow.xib */; };
 		AF858950106977F20004D36B /* PaintingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = AF85894F106977F20004D36B /* PaintingWindow.m */; };
 		AFCEBA2111D96215001AA22A /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCEBA1A11D96215001AA22A /* Icon-72.png */; };
@@ -98,6 +100,9 @@
 		AAC0F14E16C4959400103D59 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		AAC0F15416CB3EA300103D59 /* GridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GridView.h; path = Classes/GridView.h; sourceTree = "<group>"; };
 		AAC0F15516CB3EA400103D59 /* GridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GridView.m; path = Classes/GridView.m; sourceTree = "<group>"; };
+		AAE9950016DFABF3004EF7AF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Classes/Reachability.h; sourceTree = "<group>"; };
+		AAE9950116DFABF3004EF7AF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Classes/Reachability.m; sourceTree = "<group>"; };
+		AAE9950316DFB90C004EF7AF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		AF85865310694D4D0004D36B /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		AF85894E106977F20004D36B /* PaintingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaintingWindow.h; path = Classes/PaintingWindow.h; sourceTree = "<group>"; };
 		AF85894F106977F20004D36B /* PaintingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaintingWindow.m; path = Classes/PaintingWindow.m; sourceTree = "<group>"; };
@@ -115,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAE9950416DFB90C004EF7AF /* SystemConfiguration.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
@@ -198,6 +204,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AAE9950316DFB90C004EF7AF /* SystemConfiguration.framework */,
 				2D500C810D5A7DAE00DBA0E3 /* AudioToolbox.framework */,
 				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
 				2D500B990D5A79CF00DBA0E3 /* QuartzCore.framework */,
@@ -222,6 +229,8 @@
 				1B8CA30F0DC8E3A4002C657A /* SoundEffect.m */,
 				AA258AC916A5D59D006C7A37 /* WebGet.h */,
 				AA258ACA16A5D59D006C7A37 /* WebGet.m */,
+				AAE9950016DFABF3004EF7AF /* Reachability.h */,
+				AAE9950116DFABF3004EF7AF /* Reachability.m */,
 				AA258AD216B06A31006C7A37 /* ImageUtils.h */,
 				AA258AD316B06A31006C7A37 /* ImageUtils.m */,
 				AAC0F15416CB3EA300103D59 /* GridView.h */,
@@ -377,6 +386,7 @@
 				AA258ACB16A5D59D006C7A37 /* WebGet.m in Sources */,
 				AA258AD416B06A31006C7A37 /* ImageUtils.m in Sources */,
 				AAC0F15616CB3EA400103D59 /* GridView.m in Sources */,
+				AAE9950216DFABF3004EF7AF /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
