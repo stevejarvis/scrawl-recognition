@@ -55,7 +55,6 @@
 								<string key="NSFrame">{{20, 437}, {280, 44}}</string>
 								<reference key="NSSuperview" ref="773737154"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -64,9 +63,9 @@
 								<int key="IBUIButtonType">1</int>
 								<bool key="IBUIAdjustsImageWhenHighlighted">NO</bool>
 								<bool key="IBUIAdjustsImageWhenDisabled">NO</bool>
-								<object class="NSColor" key="IBUITintColor" id="343162211">
+								<object class="NSColor" key="IBUITintColor" id="463197425">
 									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MC4zMzMzMzMzMzMzAA</bytes>
+									<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 								</object>
 								<string key="IBUIDisabledTitle">Hide Grid</string>
 								<string key="IBUISelectedTitle">Show Grid</string>
@@ -80,7 +79,11 @@
 									<bytes key="NSWhite">MAA</bytes>
 								</object>
 								<reference key="IBUINormalTitleColor" ref="797526024"/>
-								<reference key="IBUINormalTitleShadowColor" ref="343162211"/>
+								<reference key="IBUISelectedTitleShadowColor" ref="463197425"/>
+								<object class="NSColor" key="IBUINormalTitleShadowColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MC4zMzMzMzMzMzMzAA</bytes>
+								</object>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">2</int>
 									<double key="pointSize">15</double>

@@ -45,7 +45,6 @@
 // Periodically sent new data, remember it.
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    NSLog(@"Received more data");
     // Append the new data to receivedData.
     [receivedData appendData:data];
 }

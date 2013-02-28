@@ -47,7 +47,6 @@
 // The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
 	
-	//NSMutableArray*	recordedPaths;
 	CGImageRef		brushImage;
 	CGContextRef	brushContext;
 	GLubyte			*brushData;
@@ -76,7 +75,6 @@
 		// Texture dimensions must be a power of 2. If you write an application that allows users to supply an image,
 		// you'll want to add code that checks the dimensions and takes appropriate action if they are not a power of 2.
 		
-		// Make sure the image exists
 		if(brushImage) {
 			// Allocate  memory needed for the bitmap context
 			brushData = (GLubyte *) calloc(width * height * 4, sizeof(GLubyte));
@@ -103,13 +101,11 @@
 		glMatrixMode(GL_PROJECTION);
 		CGRect frame = self.bounds;
 		CGFloat scale = self.contentScaleFactor;
-		// Setup the view port in Pixels
-        NSLog(@"Dimensions of drawing surface will be %f squared.", frame.size.width);
         // Center the square view.
         dimension = [self maxDimensionForScreenSize:frame.size.width];
         offsetX = (frame.size.width - dimension) / 2;
         offset = (frame.size.height - dimension) / 2;
-        NSLog(@"dimension: %d offsetX: %d offset: %d", dimension, offsetX, offset);
+        NSLog(@"dimension: %d offsetX: %d offsetY: %d", dimension, offsetX, offset);
 		glOrthof(offsetX, dimension * scale, offset, dimension * scale + offset, -1, 1);
         // glViewport is (x, y, width, height)
 		glViewport(offsetX, offset, dimension * scale, dimension * scale);
@@ -147,7 +143,7 @@
 
 - (int) maxDimensionForScreenSize:(int)screenWidth
 {
-    // Want an evenly divided grid.
+    // Want an evenly divided grid. On my phone, should return 308.
     int divSize = screenWidth / sqrt(numSections);
     return divSize * sqrt(numSections);
 }
@@ -217,7 +213,6 @@
 // Releases resources when they are not longer needed.
 - (void) dealloc
 {
-    // TODO release offset and dimension
     [self.inkTouches release];
     [self.gridView release];
 	if (brushTexture)
@@ -309,7 +304,6 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     // If there's a timer set, cancel it.
-    NSLog(@"Touch began. Timer is %@", touchTimer);
     if (touchTimer != nil) {
         [touchTimer invalidate];
         [touchTimer release];
@@ -352,7 +346,7 @@
             int targetCharIndex = (realY * dimension) + realX;
             NSAssert(targetCharIndex < (dimension * dimension), @"Target character index larger than string");
             [self.inkTouches replaceCharactersInRange:NSMakeRange(targetCharIndex, 1) withString:@"1"];
-        } else { NSLog(@"top: %d touch: %f", topBounds, location.y);}
+        }
 	}
     
 	// Render the stroke
@@ -404,9 +398,7 @@
     
     NSError *e = nil;
     NSArray *jsonResponse = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
-    NSLog(@"%@", jsonResponse);
     NSNumber *answer = [[jsonResponse objectAtIndex:0] objectAtIndex:0];
-    // TODO actually do something interesting with the data?
     // Show the answers!
     UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"It looks like a..."
                                                      message:[NSString stringWithFormat:@"%@", answer]
