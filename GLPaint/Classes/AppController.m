@@ -64,5 +64,6 @@
 
 - (IBAction)toggleGrid:(id)sender {
     [[self drawingView] toggleGridVisible];
+    [sender setSelected:![sender isSelected]];
 }
 @end

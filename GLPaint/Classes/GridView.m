@@ -16,16 +16,19 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    [self setBackgroundColor:[UIColor colorWithWhite:3.0 alpha:0.1]];
+    [self setBackgroundColor:[UIColor colorWithWhite:50 alpha:0.1]];
     [self setGridIsVisible: true];
     return self;
 }
 
 - (void)drawRect:(CGRect)rect
 {
+    /*
+     This is where the view is actually drawn. So overriding it allows me to add
+     a grid to it.
+     */
     if (self.gridIsVisible)
     {
-        NSLog(@"Drawing the grid");
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
         CGContextSetLineWidth(context, 2.0);
@@ -33,7 +36,6 @@
         int dimension = [self frame].size.width;
         int edges[2] = {0, dimension};
         int step = dimension / sqrt(self.sections);
-        NSLog(@"Step: %d", step);
         // Do vertical grid lines
         CGContextMoveToPoint(context, 0.0, 0.0);
         int count = 1;
@@ -56,9 +58,9 @@
     }
 }
 
-// Says we don't want the touch, let painting view handle it.
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
+    // Says we don't want the touch, let painting view handle it.
     return NO;
 }
 
