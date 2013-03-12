@@ -278,7 +278,7 @@ if __name__ == '__main__':
             print('Size must be an integer.')
             sys.exit(0)
         except TypeError:
-            print('train_nnet.py -h for help.')
+            print('train.py -h for help.')
             sys.exit(0)
         if size not in [4, 16, 49, 196, 784]:
             print('Not a valid size! These are acceptable: 4, 16, 49, 196, 784.')
