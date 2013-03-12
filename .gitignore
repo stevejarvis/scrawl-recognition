@@ -23,3 +23,7 @@ GLPaint/GLPaint.xcodeproj/xcuserdata/
 
 # Generated images
 NetworkTraining/testdata/
+
+# Split of the huge data
+NetworkTraining/data/train.csv
+NetworkTraining/data/test.csv
