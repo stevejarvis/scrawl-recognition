@@ -75,15 +75,25 @@ def rotate(surface, degrees):
 if __name__ == '__main__':
     
     # A fraction representing the change in size. 0.2 = 80% of original.
-    resize_factor = 0.2
+    resize_factors = [0.0, 0.2, 0.3, 0.4, -0.2, -0.3, -0.4]
+    # A positive rotation is counterclockwise, negative is clockwise. In degrees
+    rotations = [0, 7, 12, -7, -12]
+    data_path = r'/Users/steve/Dev/scrawl/NetworkTraining/data/messy-data.csv'
+    
+    with open(data_path, 'w'):
+        # Start with empty file
+        pass
     
     for data in pixel_datas():
-        surface = make_surface_from(data[1:])
-        small_data = data[0].append(resize_smaller(surface, resize_factor))
-        big_data = data[0].append(resize_larger(surface, resize_factor))
-        assert (len(small_data) == len(big_data) == len(data))
-        with open('./data/messy-data.csv', 'w') as fh:
-            print(','.join(data), file=fh)
-            print(','.join(small_data), file=fh)
-            print(','.join(big_data), file=fh)
+        orig_surface = make_surface_from(data[1:])
+        for size in resize_factors:
+            sized_surface = resize(orig_surface, size)
+            for rotation in rotations:
+                end_surface = rotate(sized_surface, rotation)
+                end_pixels = surface_as_pixels(end_surface)
+                end_pixels.insert(0, data[0])
+                assert (len(end_pixels) == len(data))
+                with open(data_path, 'a') as fh:
+                    print(','.join([str(i) for i in end_pixels]), file=fh)
+        break
             
