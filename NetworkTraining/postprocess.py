@@ -46,6 +46,15 @@ def resize(surface, factor):
     dest.blit(new_source, (offset, offset))
     return dest
 
+def rotate(surface, degrees):
+    '''
+    Is passed a pygame surface and rotates based on degrees. Return new surface.
+    Needs to be resized back to 28x28.
+    '''
+    assert (surface.get_width() == surface.get_height())
+    new_surf = pygame.transform.rotate(surface, degrees)
+    return pygame.transform.scale(new_surf, (28, 28))
+
         
 if __name__ == '__main__':
     

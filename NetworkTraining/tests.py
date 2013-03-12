@@ -65,7 +65,22 @@ class Test(unittest.TestCase):
             pygame.image.save(smaller_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_smaller.jpg' %(each[0]))
             pygame.image.save(larger_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_larger.jpg' %(each[0]))
 
-    
+    def testImageRotation(self):
+        datas = []
+        for pixels in postprocess.pixel_datas():
+            datas.append(pixels)
+            if len(datas) > 4:
+                break
+        for each in datas:
+            surface = postprocess.make_surface_from(each[1:])
+            left_surface = postprocess.rotate(surface, 10)
+            right_surface = postprocess.rotate(surface, -10)
+            assert surface.get_size() == (28, 28)
+            assert left_surface.get_size() == (28, 28)
+            assert right_surface.get_size() == (28, 28)
+            pygame.image.save(left_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_left.jpg' %(each[0]))
+            pygame.image.save(right_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_right.jpg' %(each[0]))
+        
     def testSurfaceToPixels(self):
         ''' If we read pixels, make an image, and write pixels, should be back
         to where we started. '''
