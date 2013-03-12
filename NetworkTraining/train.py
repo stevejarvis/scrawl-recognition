@@ -51,7 +51,7 @@ def learned(nn, num_sections, num_samples=1000):
 
 def get_training_data(sections):
     ''' Generator to give chunks of data. 
-    There are 32,000 sets in the training data we have. '''
+    There are 1.5M sets in the training data we have. '''
     with open('./data/train.csv', 'r') as fh:
         data = []
         # Not at all resource friendly. If issues, use generator.
@@ -68,7 +68,7 @@ def get_training_data(sections):
                       get_densities(two_d))
             data.append((inputs, ans))
             # When we read in a good chunk of data, give it up.
-            if line_count % 200 == 0:
+            if line_count % 500 == 0:
                 yield data
                 data = []
         
@@ -221,7 +221,7 @@ def train_that_network(size):
         mmntm = learn_rate / random.choice([1.0, 2.0, 3.0])
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
-            mnn.train_network(data, learn_rate, mmntm, 200)
+            mnn.train_network(data, learn_rate, mmntm, 300)
             ratio = learned(mnn, size, num_samples=2999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
