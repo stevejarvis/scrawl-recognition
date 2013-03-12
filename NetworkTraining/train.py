@@ -217,12 +217,12 @@ def train_that_network(size):
     while True:
         # To avoid getting stuck from stagnant rates, pick from a couple at
         # random. This came to me in a daydream.
-        learn_rate = random.choice([0.02, 0.002, 0.0002])
+        learn_rate = random.choice([0.002, 0.0008, 0.0002])
         mmntm = learn_rate / random.choice([1.0, 2.0, 3.0])
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
             mnn.train_network(data, learn_rate, mmntm, 300)
-            ratio = learned(mnn, size, num_samples=9999)
+            ratio = learned(mnn, size, num_samples=49999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
                 mnn.save_weights(os.path.join(our_root, percent_s))
