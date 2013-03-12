@@ -34,7 +34,7 @@ def yell(msg):
 def learned(nn, num_sections, num_samples=1000):
     ''' Return the ratio representing the success rate. '''
     correct = 0
-    with open('./data/test-no-header.csv', 'r') as fh:
+    with open('./data/test.csv', 'r') as fh:
         for i in range(num_samples):
             line = fh.readline()
             pixels = [int(x) for x in line[2:].split(',')]
@@ -52,7 +52,7 @@ def learned(nn, num_sections, num_samples=1000):
 def get_training_data(sections):
     ''' Generator to give chunks of data. 
     There are 32,000 sets in the training data we have. '''
-    with open('./data/train-no-header.csv', 'r') as fh:
+    with open('./data/train.csv', 'r') as fh:
         data = []
         # Not at all resource friendly. If issues, use generator.
         for line_count, line in enumerate(fh.readlines()):
