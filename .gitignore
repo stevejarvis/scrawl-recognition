@@ -20,3 +20,6 @@
 # Xcode files
 GLPaint/GLPaint.xcodeproj/project.xcworkspace/
 GLPaint/GLPaint.xcodeproj/xcuserdata/
+
+# Generated images
+NetworkTraining/testdata/
