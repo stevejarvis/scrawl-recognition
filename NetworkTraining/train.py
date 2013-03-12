@@ -237,6 +237,8 @@ def train_that_network(size):
 if __name__ == '__main__':
     # Set up the logger
     logpath = './results/train_nnet.log'
+    if not os.path.exists('./results'):
+        os.makedirs('./results')
     logging.basicConfig(level=logging.INFO,
                         format='%(threadName)s %(asctime)s %(levelname)s %(message)s',
                         datefmt='%m-%d %H:%M',
