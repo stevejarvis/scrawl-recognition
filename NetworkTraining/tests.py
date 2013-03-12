@@ -5,6 +5,8 @@ Created on Nov 6, 2012
 '''
 import unittest
 import image_ops
+import postprocess
+import pygame
 
 class Test(unittest.TestCase):
 
@@ -41,6 +43,33 @@ class Test(unittest.TestCase):
         res = image_ops.sections_as_ink(sample, 25)
         self.assertEquals(res, 
                           [1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1])
+    
+    def testImageResizing(self):
+        ''' Just resize an image and open larger and smaller versions, have
+        to be visual inspections. Also need to all be 28x28. '''
+        datas = []
+        for pixels in postprocess.pixel_datas():
+            datas.append(pixels)
+            if len(datas) > 4:
+                break
+        for each in datas:
+            surface = postprocess.make_surface_from(each[1:])
+            smaller_surface = postprocess.resize(surface, -0.3)
+            larger_surface = postprocess.resize(surface, 0.3)
+            assert surface.get_size() == (28, 28)
+            assert smaller_surface.get_size() == (28, 28)
+            assert larger_surface.get_size() == (28, 28)
+            
+            # Wish I could find a way to open a surface without saving it??
+            pygame.image.save(surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d.jpg' %(each[0]))
+            pygame.image.save(smaller_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_smaller.jpg' %(each[0]))
+            pygame.image.save(larger_surface, '/Users/steve/Dev/scrawl/NetworkTraining/testdata/%d_larger.jpg' %(each[0]))
+
+    
+    def testSurfaceToPixels(self):
+        ''' If we read pixels, make an image, and write pixels, should be back
+        to where we started. '''
+        pass
 
 
 if __name__ == "__main__":
