@@ -3,6 +3,9 @@
 The goal here is to unpreprocess the data from the MNIST database. It's too
 consistent with the piece of frame the digit takes in the middle of the image.
 I want to messy it up a bit to improve accuracy in the application.
+
+The training application assumes 28x28 size, so this and the tests are designed
+to suit.
 '''
 
 from __future__ import print_function
@@ -12,6 +15,7 @@ import math
         
 def make_surface_from(pixels):
     dim = int(math.sqrt(len(pixels)))
+    assert dim == 28
     surf = pygame.Surface((dim,dim))
     for y in range(dim):
         for x in range(dim):
@@ -30,8 +34,19 @@ def pixel_datas():
             yield pixels
 
 def surface_as_pixels(surface):
-    ''' Each pixel represented by 0-255 val '''
-    pass
+    ''' Each pixel represented by 0-255 val. Return one long list, from top left
+    to bottom right. '''
+    # There are surfarray methods that may be faster, but insist on being 2 or
+    # 3 dimensional. This is straight forward, albeit probably slow. It's a 
+    # 1-time deal.
+    assert (surface.get_width() == surface.get_height() == 28)
+    dim = 28
+    pixels = []
+    for y in range(dim):
+        for x in range(dim):
+            # All 3 of RGB should be set identically.
+            pixels.append(surface.get_at((x, y))[0])
+    return pixels
               
 def resize(surface, factor):
     '''
@@ -39,8 +54,8 @@ def resize(surface, factor):
     '''
     assert (surface.get_width() == surface.get_height())
     dimension = surface.get_height()
-    new_size = int(dimension + math.ceil(dimension * factor))
     dest = pygame.Surface((dimension, dimension))
+    new_size = int(dimension + math.ceil(dimension * factor))
     new_source = pygame.transform.scale(surface, (new_size, new_size))
     offset = -(0.5 * math.ceil(dimension * factor))
     dest.blit(new_source, (offset, offset))
@@ -49,7 +64,8 @@ def resize(surface, factor):
 def rotate(surface, degrees):
     '''
     Is passed a pygame surface and rotates based on degrees. Return new surface.
-    Needs to be resized back to 28x28.
+    Needs to be scaled back to 28x28, the rotated image will be slightly 
+    smaller than original.
     '''
     assert (surface.get_width() == surface.get_height())
     new_surf = pygame.transform.rotate(surface, degrees)
@@ -67,7 +83,7 @@ if __name__ == '__main__':
         big_data = data[0].append(resize_larger(surface, resize_factor))
         assert (len(small_data) == len(big_data) == len(data))
         with open('./data/messy-data.csv', 'w') as fh:
-            print(', '.join(data), file=fh)
-            print(', '.join(small_data), file=fh)
-            print(', '.join(big_data), file=fh)
+            print(','.join(data), file=fh)
+            print(','.join(small_data), file=fh)
+            print(','.join(big_data), file=fh)
             

@@ -53,6 +53,7 @@ class Test(unittest.TestCase):
             if len(datas) > 4:
                 break
         for each in datas:
+            # Splice because first item is answer
             surface = postprocess.make_surface_from(each[1:])
             smaller_surface = postprocess.resize(surface, -0.3)
             larger_surface = postprocess.resize(surface, 0.3)
@@ -84,7 +85,11 @@ class Test(unittest.TestCase):
     def testSurfaceToPixels(self):
         ''' If we read pixels, make an image, and write pixels, should be back
         to where we started. '''
-        pass
+        for orig_pix in postprocess.pixel_datas():
+            break
+        surface = postprocess.make_surface_from(orig_pix[1:])
+        new_pix = postprocess.surface_as_pixels(surface)
+        self.assertEquals(orig_pix[1:], new_pix)
 
 
 if __name__ == "__main__":
