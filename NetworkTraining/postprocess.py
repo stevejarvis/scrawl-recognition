@@ -78,13 +78,13 @@ if __name__ == '__main__':
     resize_factors = [0.0, 0.2, 0.3, 0.4, -0.2, -0.3, -0.4]
     # A positive rotation is counterclockwise, negative is clockwise. In degrees
     rotations = [0, 7, 12, -7, -12]
-    data_path = r'/Users/steve/Dev/scrawl/NetworkTraining/data/messy-data.csv'
+    data_path = r'./data/messy-data.csv'
     
     with open(data_path, 'w'):
         # Start with empty file
         pass
     
-    for data in pixel_datas():
+    for line_num, data in enumerate(pixel_datas()):
         orig_surface = make_surface_from(data[1:])
         for size in resize_factors:
             sized_surface = resize(orig_surface, size)
@@ -95,5 +95,5 @@ if __name__ == '__main__':
                 assert (len(end_pixels) == len(data))
                 with open(data_path, 'a') as fh:
                     print(','.join([str(i) for i in end_pixels]), file=fh)
-        break
-            
+        if line_num % 1000 == 0:
+            print('Messin\' up %d' %line_num) 
