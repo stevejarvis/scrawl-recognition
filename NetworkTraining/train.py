@@ -54,8 +54,8 @@ def get_training_data(sections):
     There are 1.5M sets in the training data we have. '''
     with open('./data/train.csv', 'r') as fh:
         data = []
-        # Not at all resource friendly. If issues, use generator.
-        for line_count, line in enumerate(fh.readlines()):
+	line_count = 0
+	for line in fh:
             # First character of each line is the answer digit.
             correct_index = int(line[0])
             # Training to 1 & -1 yields results all very low.
@@ -67,6 +67,7 @@ def get_training_data(sections):
             inputs = (sections_as_ink(two_d, sections) + 
                       get_densities(two_d))
             data.append((inputs, ans))
+	    line_count += 1
             # When we read in a good chunk of data, give it up.
             if line_count % 500 == 0:
                 yield data
@@ -217,11 +218,11 @@ def train_that_network(size):
     while True:
         # To avoid getting stuck from stagnant rates, pick from a couple at
         # random. This came to me in a daydream.
-        learn_rate = random.choice([0.002, 0.0008, 0.0002])
-        mmntm = learn_rate / random.choice([1.0, 2.0, 3.0])
+        learn_rate = 0.00002 #random.choice([0.002, 0.0008, 0.0002])
+        mmntm = 0.00001 #learn_rate / random.choice([2.0, 3.0])
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
-            mnn.train_network(data, learn_rate, mmntm, 300)
+            mnn.train_network(data, learn_rate, mmntm, 500)
             ratio = learned(mnn, size, num_samples=49999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
