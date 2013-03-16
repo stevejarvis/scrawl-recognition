@@ -54,8 +54,8 @@ def get_training_data(sections):
     There are 1.5M sets in the training data we have. '''
     with open('./data/train.csv', 'r') as fh:
         data = []
-	line_count = 0
-	for line in fh:
+        line_count = 0
+        for line in fh:
             # First character of each line is the answer digit.
             correct_index = int(line[0])
             # Training to 1 & -1 yields results all very low.
@@ -67,7 +67,7 @@ def get_training_data(sections):
             inputs = (sections_as_ink(two_d, sections) + 
                       get_densities(two_d))
             data.append((inputs, ans))
-	    line_count += 1
+            line_count += 1
             # When we read in a good chunk of data, give it up.
             if line_count % 500 == 0:
                 yield data
