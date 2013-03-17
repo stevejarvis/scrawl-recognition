@@ -216,10 +216,8 @@ def train_that_network(size):
         mnn.load_weights(weight_path)
         yell('Weights loaded.')
     while True:
-        # To avoid getting stuck from stagnant rates, pick from a couple at
-        # random. This came to me in a daydream.
-        learn_rate = 0.00002 #random.choice([0.002, 0.0008, 0.0002])
-        mmntm = 0.00001 #learn_rate / random.choice([2.0, 3.0])
+        learn_rate = 0.00002 
+        mmntm = 0.00001 
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
             mnn.train_network(data, learn_rate, mmntm, 500)
@@ -232,7 +230,7 @@ def train_that_network(size):
                      %(ratio * 100, size, learn_rate))
             else:
                 if verbose:
-                    print('Got a measley %f right.' %ratio)
+                    print('Got a measley %f right.' %ratio * 100)
        
 
 if __name__ == '__main__':
