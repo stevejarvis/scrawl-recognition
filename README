@@ -1,6 +1,11 @@
 This is a project to recognize handwritten digits by use of a neural network.
 
 This repository contains the iOS front end, the Python application used to train
-the network and any other pieces needed to make this work...
+the network and any other pieces needed to make this work.
 
-... Except the neural network. It has its own repo: https://github.com/stevejarvis/neural-network
+The neural network is added as a submodule and must be pulled with 'git 
+submodule update'.
+
+GLPaint: iOS application for demonstration
+NetworkTraining: Application that teaches the MNIST database to the network
+Site: Web interface for query from GLPaint
