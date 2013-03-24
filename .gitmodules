@@ -1,0 +1,3 @@
+[submodule "NetworkTraining/neuralnetwork"]
+	path = NetworkTraining/neuralnetwork
+	url = https://github.com/stevejarvis/neural-network.git

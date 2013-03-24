@@ -12,8 +12,7 @@
 # Metadata is a huge folder of who-knows-what
 *.metadata/
 
-# Neural net has it's own home
-/NetworkTraining/neuralnet
+# The results are generated
 /NetworkTraining/results
 /NetworkTraining/.settings
 
