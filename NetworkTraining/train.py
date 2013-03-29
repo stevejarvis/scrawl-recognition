@@ -40,7 +40,7 @@ def learned(nn, num_sections, num_samples=1000):
             line = fh.readline()
             pixels = [int(x) for x in line[2:].split(',')]
             two_d = two_dimension(pixels)
-            inputs = (sections_as_ink(two_d, num_sections) + 
+            inputs = (sections_as_ink(two_d, num_sections) +
                       get_densities(two_d))
             res = nn.evaluate(inputs)
             # The results is just a list of outputs between -1 and 1.
@@ -51,7 +51,7 @@ def learned(nn, num_sections, num_samples=1000):
     return float(correct) / float(num_samples)
 
 def get_training_data(sections):
-    ''' Generator to give chunks of data. 
+    ''' Generator to give chunks of data.
     There are 1.5M sets in the training data we have. '''
     with open('./data/train.csv', 'r') as fh:
         data = []
@@ -65,15 +65,15 @@ def get_training_data(sections):
             # character in the rest of the line. 1 character -> 1 pixel.
             pixels = [int(x) for x in line[2:].split(',')]
             two_d = two_dimension(pixels)
-            inputs = (sections_as_ink(two_d, sections) + 
+            inputs = (sections_as_ink(two_d, sections) +
                       get_densities(two_d))
             data.append((inputs, ans))
             line_count += 1
             # When we read in a good chunk of data, give it up.
-            if line_count % 500 == 0:
+            if line_count % 5000 == 0:
                 yield data
                 data = []
-        
+
 def train_experiment(nnet, num_sections, learn_rate, mom_rate, results=None):
     ''' This returns a list of tuples (iterations, success rate).
     Used for the experiment.'''
@@ -81,13 +81,13 @@ def train_experiment(nnet, num_sections, learn_rate, mom_rate, results=None):
     if results == None:
         results = []
     for count, data in enumerate(get_training_data(num_sections)):
-        nnet.train_network(data, 
+        nnet.train_network(data,
                            change_rate=learn_rate,
-                           momentum=mom_rate, 
+                           momentum=mom_rate,
                            iters=iterations)
         ratio = learned(nnet, num_sections)
         if verbose:
-            print('%s %f percent after %d iterations.' 
+            print('%s %f percent after %d iterations.'
                   %(threading.current_thread().name,
                     ratio * 100,
                     count * iterations))
@@ -101,9 +101,9 @@ def run_experiment():
     except ImportError:
         yell('Need matplotlib for graphing.')
         sys.exit(0)
-    
+
     yell('Running experiment...')
-        
+
     def get_style_color(label):
         ''' Specific for values in app.py. Return tuple of (color, marker, label)
         Would be made better with regex, but... hack jack, hack.'''
@@ -139,11 +139,11 @@ def run_experiment():
             style_b = '--'
             label_b = '*, *'
         return((style_a, style_b, '%s%s' %(label_a, label_b)))
-     
+
     nnet_sizes = [16, 49, 196, 784]
     rates = [(0.2, 0.1), (0.002,0.001), (0.00002,0.00001)]
     dct = {}
-    
+
     # Start threads doing magic
     threads = []
     for size in nnet_sizes:
@@ -158,16 +158,16 @@ def run_experiment():
             # For each configuration from the log file.
             t = threading.Thread(target=train_experiment,
                                  name=label,
-                                 args=(mnn, size, learn, momentum, 
+                                 args=(mnn, size, learn, momentum,
                                        dct[label]))
             threads.append(t)
             t.start()
     yell('%d threads doing science.' %len(threads))
-    
+
     # Join those threads and get output
     for t in threads:
         t.join()
-        
+
     # Now results should be full, graph away.
     lab.title('Success rates over time with various networks.')
     lab.xlabel('Training Iterations')
@@ -184,7 +184,7 @@ def run_experiment():
     lab.show()
 
 def get_weights(our_root):
-    ''' Find best weights for size. 
+    ''' Find best weights for size.
     Return tuple (success rate, path to weights)'''
     try:
         options = os.listdir(our_root)
@@ -203,7 +203,7 @@ def get_weights(our_root):
     else:
         yell('Found no usable weights. Starting from scratch.')
         return (0.0, None)
-      
+
 def train_that_network(size):
     ''' I picture this running pretty much constantly. It should get updates
     on how well the network is doing, and if it's a PB, save the weights.'''
@@ -217,12 +217,12 @@ def train_that_network(size):
         mnn.load_weights(weight_path)
         yell('Weights loaded.')
     while True:
-        learn_rate = 0.00002 
-        mmntm = 0.00001 
+        learn_rate = 0.00002
+        mmntm = 0.00001
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
-            mnn.train_network(data, learn_rate, mmntm, 500)
-            ratio = learned(mnn, size, num_samples=49999)
+            mnn.train_network(data, learn_rate, mmntm, 1000)
+            ratio = learned(mnn, size, num_samples=4999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
                 mnn.save_weights(os.path.join(our_root, percent_s))
@@ -232,7 +232,7 @@ def train_that_network(size):
             else:
                 if verbose:
                     print('Got a measley %f right.' %ratio * 100)
-       
+
 
 if __name__ == '__main__':
     # Set up the logger
@@ -244,33 +244,33 @@ if __name__ == '__main__':
                         datefmt='%m-%d %H:%M',
                         filename=logpath,
                         filemode='a')
-    
+
     # Setup argument parser
     parser = ArgumentParser(description=('Choose options wisely... Logs at %s'
-                                         %logpath), 
+                                         %logpath),
                             formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-e', '--experiment', 
-                        dest='experiment', 
-                        action='store_true', 
+    parser.add_argument('-e', '--experiment',
+                        dest='experiment',
+                        action='store_true',
                         help='Generate graph of networks\' performance.\
                         Takes a long stinking time!')
     parser.add_argument('-t', '--train_size',
                         nargs=1,
                         help='Train a network. Supply size as argument.\
                         If nothing else is provided, this is required.')
-    parser.add_argument('-v', '--verbose', 
-                        dest='verbose', 
+    parser.add_argument('-v', '--verbose',
+                        dest='verbose',
                         action='count',
                         default=0,
                         help='Spam yourself.')
-    
+
     # Process arguments
     args = parser.parse_args()
-    
+
     verbose = args.verbose > 0
     if verbose:
         yell('Verbose mode.')
-    
+
     if args.experiment:
         run_experiment()
     else:
