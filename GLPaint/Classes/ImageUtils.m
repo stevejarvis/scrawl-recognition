@@ -122,13 +122,11 @@
     
     float total = north + south + west + east;
 
-    // The factor of 10 is introduced by the network to exaggerate the density differences.
-    // Now that seems silly.
-    total = total / (dimension * dimension / 10);
-    north = north / (dimension * dimension / 10);
-    south = south / (dimension * dimension / 10);
-    west = west / (dimension * dimension / 10);
-    east = east / (dimension * dimension / 10);
+    total = total / (dimension * dimension);
+    north = north / (dimension * dimension);
+    south = south / (dimension * dimension);
+    west = west / (dimension * dimension);
+    east = east / (dimension * dimension);
     
     NSString *ret = [NSString stringWithFormat:@"t=%1.9f&n=%1.9f&s=%1.9f&w=%1.9f&e=%1.9f", total, north, south, west, east];
     return ret;
