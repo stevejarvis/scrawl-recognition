@@ -221,7 +221,7 @@ def train_that_network(size):
         mmntm = 0.00001
         yell('Learning rate: %f Momentum rate: %f' %(learn_rate, mmntm))
         for data in get_training_data(size):
-            mnn.train_network(data, learn_rate, mmntm, 1000)
+            mnn.train_network(data, learn_rate, mmntm, 10000)
             ratio = learned(mnn, size, num_samples=4999)
             if ratio > current_best:
                 percent_s = str(ratio).replace('.', '_')
