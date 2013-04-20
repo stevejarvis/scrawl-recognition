@@ -50,10 +50,10 @@ def learned(nn, num_sections, num_samples=1000):
                 correct += 1
     return float(correct) / float(num_samples)
 
-def get_training_data(sections):
+def get_training_data(sections, datafile='./data/train.csv', chunksize=5000):
     ''' Generator to give chunks of data.
     There are 1.5M sets in the training data we have. '''
-    with open('./data/train.csv', 'r') as fh:
+    with open(datafile, 'r') as fh:
         data = []
         line_count = 0
         for line in fh:
@@ -70,7 +70,7 @@ def get_training_data(sections):
             data.append((inputs, ans))
             line_count += 1
             # When we read in a good chunk of data, give it up.
-            if line_count % 5000 == 0:
+            if line_count % chunksize == 0:
                 yield data
                 data = []
 
@@ -80,7 +80,9 @@ def train_experiment(nnet, num_sections, learn_rate, mom_rate, results=None):
     iterations = 200
     if results == None:
         results = []
-    for count, data in enumerate(get_training_data(num_sections)):
+    for count, data in enumerate(get_training_data(num_sections, 
+                                            datafile='./data/original-train-no-header.csv',
+                                            chunksize=200)):
         nnet.train_network(data,
                            change_rate=learn_rate,
                            momentum=mom_rate,
