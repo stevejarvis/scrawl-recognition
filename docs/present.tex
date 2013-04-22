@@ -7,6 +7,7 @@
 \setcounter{secnumdepth}{-1} 
 \usepackage[pdftex]{graphicx}
 \usepackage{listings}
+\usepackage[T1]{fontenc}
 
 \begin{document}
 \maketitle
@@ -16,11 +17,10 @@
 \subsection{What's a Neural Network?}
 
     \paragraph{}A neural network is a general machine learning tool that can be 
-    used to learn a large variety of data sets. A neural network is named so 
-    because of its inspiration: biological neurons in the brain! A conventional
-    artificial neural network learns by making an estimate, getting feedback, and 
-    adjusting the priority given to all its connections (neurons) in such a way 
-    that it inches towards the correct answer.
+    used to represent artificial intelligence on a wide variety of data sets. 
+    A conventional artificial neural network learns by making an estimate, getting 
+    feedback, and adjusting the priority given to all its connections (neurons) 
+    in such a way that it inches towards the correct answer.
 
     \paragraph{}The simplest neural network is one consisting of two layers. A 
     weight connects each node in the first layer to each node in the second layer.
@@ -30,16 +30,20 @@
     yield output representing true (in this case, a positive value in the right
     output node and negative in the left output node). See 
     Figure~\ref{basicnetwork} on  page~\pageref{basicnetwork} for an 
-    illustration.
+    illustration. The output will surely be wrong initially, so the error for 
+    each output node is calculated, used to change the corresponding weights, 
+    and continues back up the graph. The next time the network comes across 
+    similar input it will give an estimate slightly closer to the desired answer.
 
     \paragraph{}An important consideration for this sample network is its limited 
     learning ability. A two-layer network can only learn linearly separable 
     functions; equations whose positive and negative results, when graphed, can 
     be partitioned by a single line. More complex functions require deeper networks
-    to learn, although the complexity increases quickly. With only a single extra 
+    to learn, although the power increases quickly. With only a single extra 
     layer (and ~200 nodes per layer) the neural net used in this project was able 
     to achieve 93 percent accuracy on the MNIST Database of Handwritten 
-    Digits\footnote{http://yann.lecun.com/exdb/mnist/}.
+    Digits\footnote{For more information about the MNIST Database see
+    http://yann.lecun.com/exdb/mnist/}.
 
     \begin{figure}
         \centering
@@ -47,7 +51,7 @@
         \caption{The top layer are inputs, connected by weights to the bottom 
             layer. The weights are changed during training so that they give the 
             desired output for the right input. A common implementation is to use 
-            functions with a range such that -1 lt y lt 1, so assuming the network 
+            functions with a range such that -1 < y < 1, so assuming the network 
             is trained to represent true with 1 and false with -1, this would be 
             a great output.}
         \label{basicnetwork}
@@ -58,14 +62,16 @@
     \paragraph{}The third input node is a bias. The purpose of the bias is 
     to allow any necessary shifting of the activation function. For example, the 
     activation function for the network used in this project is hyperbolic 
-    tangent. It was used because its domain is all real numbers, it is smooth, 
+    tangent. It was used because it has a domain of all real numbers, it is smooth, 
     continuous, and symmetrical, and the range is -1 to 1. It is also easily 
-    derived, which is important in training. As the weights change, 
-    the steepness of the graph is manipulated, but the y-intersect is always 0. 
-    The bias node allows shifting of the entire graph, which is the only way to 
-    train something other than a 0 output for a 0 input. For example, without
-    a bias node, the two layer network would not even be able to learn logical
-    AND.
+    derived, which is important in training. During evaluation, the weights of the 
+    neural network are applied as coefficients to the activation function. 
+    As the weights change, the steepness of the graph is manipulated, but the 
+    y-intersect is always 0 (See Figure~\ref{bias}). The bias node allows shifting
+    of the entire graph, which is the only way to train something other than a 0 
+    output for a 0 input. For example, without a bias node, the two layer network 
+    would not be able to learn logical NAND, even though the function is linearly 
+    separable.
 
     \begin{figure}
         \centering
@@ -73,6 +79,7 @@
         \caption{The graph of a general sigmoidal function as the coefficients 
             (weights) change. Pic taken from StackOverflow: 
             http://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks}
+        \label{bias}
     \end{figure}
 
 \subsection{How Are the Correct Weights Calculated?}
@@ -92,34 +99,35 @@
     
     \paragraph{}The network is always training in the background so the user can 
     see potentially constant improvement, and to learn more and different 
-    handwriting there only needs to be more data added to the training instance 
-    on the server. Also, the network takes very long to train. At the time of this 
+    handwriting there only needs to be more data added for the training instance 
+    to reference. Also, the network takes very long to train. At the time of this 
     presentation, this network will have been training on euclid for about a 
     month, and that's not unusual. Because of the dependency on 
     adjacent layers in back propagated training, parallelization is difficult to
     implement successfully and efficiently\footnote{
-    https://research.microsoft.com/apps/pubs/default.aspx?id=173312} and is beyond
-    the scope of this project.
+    https://research.microsoft.com/apps/pubs/default.aspx?id=173312}. Parallelized
+    training would be a great future endeavor but was beyond the scope of this 
+    project.
 
     \paragraph{}Earlier it was mentioned that hyperbolic tangent is easily derived
     and that's nice for training. This is because we can use the derivative of the 
     activation function in calculating the weight deltas. Consider how the 
     derivative changes as the hyperbolic tangent is traveled. Since the derivative 
-    is greatest at the middle -- where the activation is most uncertain -- results 
-    in the middle will cause a greater change in the associated weights. 
-    Conversely, as the network's weights become more established through training, 
-    the derivative approaches zero and the network stabilizes.
+    is greatest towards the middle -- where the activation is most uncertain -- 
+    results in the middle will cause a greater change in the associated weights. 
+    Conversely, as the network's weights become more established through training 
+    the derivative approaches zero and stabilizes the network.
 
 \subsection{iOS, JSON, and CGI.}
 
     \paragraph{}I wanted a good way to demonstrate the working neural network. Just
     knowing it can recognize handwritten characters in a database is not very 
     exciting, but having it recognize a user's in real time would be. So an iOS 
-    front end was added to take input, query the server on which the network is 
-    running, and return an ordering of likeliness, from 0 to 9, of which digit it 
-    was sent. The only particular I'd like to mention is how surprisingly easy it 
-    was get Apache to serve Python files. A single line file in the pub directory 
-    on euclid is all it takes. \\
+    front end was created to take input, query the server on which the network is 
+    running, and display the most likely results, between 0 to 9, of which digit 
+    was entered. The only particular I'd like to mention is how surprisingly easy 
+    it was to have Apache serve Python files. A single line file in the pub 
+    directory on euclid is all it takes. \\
 
     \begin{lstlisting}
     File: .htaccess
@@ -131,26 +139,27 @@
 
 \subsection{How It Works.}
 
-    \paragraph{}Each image of a handwritten digit is divided into 196 subsections.
-    The data from the MNIST database are 28x28 pixel images, so to maintain a
-    physical square with no extraneous pixels the image had to be represented with
-    either 4, 16, 49, 196, or 784 sections. Based on various runs of the 
-    experiment (a special mode of network training) it was decided that 196
-    yielded the best balance of complexity and image granularity. See an example
-    of the experiment's results in Figure~\ref{experiment}. In all, the 
-    production neural network has 201 inputs, 201 hidden nodes, and 10 outputs. 
-    196 of the inputs are a simple binary representing the presence of ink in 
-    that subsection. The additional five inputs represent the relative 
-    distribution of ink in the image -- percent of ink north of the horizon, 
-    south of the horizon, west of middle, east of middle, and percent of total 
-    sections containing ink. A section contains ink if even a single pixel in 
-    that section is over a predetermined threshold.
+    \paragraph{}Each image of a handwritten digit is divided into 196 logical 
+    sections. The samples from the MNIST database are 28x28 pixel images, so to 
+    maintain a physical square with no extraneous pixels the image had to be 
+    represented with either 4, 16, 49, 196, or 784 sections\footnote{These are 
+    special sizes that are both perfect squares and evenly divisible by 28.}. 
+    Based on various runs of the experiment (a special mode of network training) 
+    it was decided that 196 yielded the best balance of complexity and image 
+    granularity. See an example of the experiment's results in 
+    Figure~\ref{experiment}. In all, the production neural network has 201 inputs,
+    201 hidden nodes, and 10 outputs. 196 of the inputs are a simple binary 
+    representation of the presence of ink in that section. The additional five 
+    inputs represent the relative distribution of ink in the image -- percent of
+    ink north of the horizon, south of the horizon, west of middle, east of 
+    middle, and percent of total sections containing ink. A section contains 
+    ink if even a single pixel in that section is over a predetermined threshold.
 
     \begin{figure}
         \centering
         \includegraphics[scale=0.4]{images/experiment.png}
         \caption{Example output of the experiment feature of the network training
-            application. Runs like this helped to determine the best network 
+            application. Data like this helped to determine the best network 
             size and proper coefficients for learning rates. This particular run
             of the experiment took 9 hours to complete, running the experiment
             with the network for 784 section images takes multiple days to 
@@ -160,13 +169,13 @@
     \end{figure}
 
     \paragraph{}The same algorithms are applied to translating the MNIST data
-    to network input as translating the iOS application data to network input.
+    to network input as translating the iOS application entries to network input.
     When the user enters a digit on the iPhone application, the image is
     used to generate the binary representation described above and built into
     a web request to the web site. The site uses the neural network to interpret
-    the data it received based on the best known configuration at the time, and
-    then outputs a JSON response of the network's output. The iOS application
-    uses that response to display the best estimate of the network and associated
+    the data it receives based on the best known configuration at the time and
+    outputs a JSON response of the network's estimate. The iOS application
+    uses that response to display the most likely answers and associated
     certainties. See Figure~\ref{diagram} for an illustration of the interactions.
     Also note that the optimal learning and momentum rate vary
     with the complexity of the data and size of the network.
@@ -187,7 +196,7 @@
     \paragraph{}In designing this project I aimed to make it modular. Each logical
     task is the responsibility of a specific sub-application. The only exception
     is the experiment, which was used to establish near-optimal coefficients and 
-    explain unusual behavior at the start of the project (more on that later).
+    explain unusual behavior at the start of the project.
     The experiment piggy backs as a part of the network training application 
     because of the significant overlap in funcionality. In all, there are five
     sub-applications involved in the process up to this point. The 
@@ -197,44 +206,44 @@
 
     \paragraph{}The project's parts are all under Git version control. A primary 
     goal of this project was to build a general purpose, reusable neural network, 
-    so it exists in its own repository
+    so the neural network exists in a dedicated repository
     \footnote{github.com/stevejarvis/neural-network}. The other applications exist
     as subfolders of a repository created specifically for this project. The
     neural network repository is referenced as a submodule of this general 
-    repository
+    project repository
     \footnote{github.com/stevejarvis/scrawl-recognition}.
 
     \paragraph{}Since there is nothing specific to handwriting recognition in the
-    network package I like the decision to store and reference it as an indepenent
-    package. What could use improvement is the way the network is 
+    network I am happy with the decision to store and reference it as an 
+    indepenent package. What could use improvement is the way the network is 
     incorporated with the rest of the project. There are multiple applications 
     that rely on the neural network package yet it is added as a Git submodule 
     under the network training application's directory. It would be more 
-    appropriate to have the Git submodule in a more neutral location and
+    appropriate to have the network submodule in a more neutral location and
     reference it accordingly from the other applications. 
     
     \paragraph{}There is also substantial set up to have a completely working
     demonstration (web page, network training, adding the neural network package
-    to the Python Path). It would be nice to package the suite in a way that 
-    facilitates a more automated out-of-the-box solution.
+    to the Python Path). It would be nice to package the applications in a way 
+    that facilitates a more automated out-of-the-box solution.
 
 \section{As Hard As I Expected...}
 
     \paragraph{}I was expecting really hard, and it's about what I got. There were 
-    a couple especially difficult hurdles as I was working on this project. When I
-    first starting trying to train handwritten digit recognition I didn't
-    get any performance better than about 15\% successful recognition. I trained
-    network for days on even small samples of data and it just stalled. Worse 
-    still, it was unpredictable and inconsistent. This is why I added the 
-    ``experiment" mode to the network training application. I could see that 
-    ``skinny" three-layer networks -- networks with fewer than about 60 nodes per 
-    layer -- mastered data sets quickly and flawlessly. As the networks grew larger
-    they became wildly inconsistent. The experiment trained a constant function for
-    a constant number of iterations on increasingly large networks and graphed the 
-    error rate and time to completion versus size. Figure~\ref{badgraph} shows the 
-    inital results. There are so many moving pieces I couldn't imagine what the 
-    issue was. It turns out the answer was local minima, and that turning the 
-    learning and momentum rates way down would help to avoid sticking points.
+    a couple especially difficult hurdles I encountered while working on this 
+    project. When I first starting trying to train handwritten digit recognition I 
+    didn't get any performance better than about 15\% successful recognition. I 
+    trained for days on even small samples of data and the success rate just 
+    stalled. Worse still, it was unpredictable and inconsistent. This is why I 
+    added the ``experiment" mode to the network training application. I could see 
+    that ``skinny" three-layer networks -- networks with fewer than about 60 nodes 
+    per layer -- mastered data sets quickly and flawlessly. As the networks grew 
+    larger they became wildly inconsistent. The experiment trained a constant 
+    function for a constant number of iterations on increasingly large networks and 
+    graphed the error rate and time to completion versus size. Figure~\ref{badgraph}
+    shows the initial results. There were so many moving pieces I couldn't imagine 
+    what the issue was. It turns out the answer was local minima, and that turning the 
+    learning and momentum rates down significantly would help to avoid sticking points.
     Figure~\ref{goodgraph} shows the nearly flawless performance of the improved 
     network.
 
@@ -245,20 +254,23 @@
     the test data. In actual use, however, I found the network to correctly 
     interpret only the nicest of input; perfectly sized and centered submissions.
     The problem was the strict preprocessing done on the data in the MNIST Database
-    did not represent unfiltered data from the real world. To improve performance,
-    I ``messied" up the data by changing the size and rotation. The variations I 
-    added turned the training set of ~40k samples into a set of ~1.5M samples. 
+    did not accurately represent unfiltered data from the real world. To improve 
+    performance, I ``messied" up the training data by adding variations on size 
+    and rotation. The samples I added turned the training set of ~40k samples 
+    into a set of ~1.5M samples. 
 
-    \paragraph{}The next great obstacle was the inability of a three layer network
-    to learn the more complex data. After swapping the training data, the learning
-    curve became stagnant at about a 70\% success rate. So I added a fourth layer.
+    \paragraph{}Shortly after adding the new data I learned the three layer 
+    network was unable to learn it, it introduced too much complexity.
+    To overcome this I added a fourth layer of neurons.
     Similar to the bump from two to three layers, the change from three to four 
     meant lower learning rates to avoid the increased chance of becoming stuck in 
     local minima and longer training times to facilitate the exponentially 
-    increasing number of connections. Alas, it seems to be working with acceptable
-    performance. To further increase the performance, I believe finding an 
-    appropriate bounding box per submitted sample on the iOS application would 
-    yield noticable improvements.
+    increasing number of connections. 
+    
+    \paragraph{}Now, finally, it seems to be working with acceptable
+    performance. To further increase the success I believe finding an 
+    appropriate bounding box before sending data from the iOS 
+    application would give noticeable improvements.
 
     \begin{figure}
         \centering
@@ -273,7 +285,7 @@
         \centering
         \includegraphics[scale=0.5]{images/good_learning.png}
         \caption{The experiment run with a learning rate and momentum rate 
-            1/1000th the magnitude of that used in Figure~\ref{badgraph}}
+            1/1000th of the magnitude used in Figure~\ref{badgraph}}
         \label{goodgraph}
     \end{figure}
 
