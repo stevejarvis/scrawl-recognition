@@ -28,7 +28,6 @@ from image_ops import two_dimension, sections_as_ink, get_densities
 
 STDOUT_LOCK = threading.Lock()
 RES_LOCK = threading.Lock()
-FILE_LOCK = threading.Lock()
 
 def yell(msg):
     ''' Just because, if verbose, I want to print AND log. '''
@@ -40,7 +39,6 @@ def yell(msg):
 
 def learned(nn, num_sections, datafile='./data/test.csv', num_samples=1000):
     ''' Return the ratio representing the success rate. '''
-    FILE_LOCK.acquire()
     correct = 0
     with open(datafile, 'r') as fh:
         for i in range(num_samples):
@@ -55,7 +53,6 @@ def learned(nn, num_sections, datafile='./data/test.csv', num_samples=1000):
             ans = res.index(max(res))
             if int(line[0]) == ans:
                 correct += 1
-    FILE_LOCK.release()
     return float(correct) / float(num_samples)
 
 def get_training_data(sections, datafile='./data/train.csv', chunksize=5000):
@@ -94,11 +91,8 @@ def train_experiment(num_sections, learn_rate, mom_rate, results=None):
                                             chunksize=200)):
         nnet.train_network(data,change_rate=learn_rate, momentum=mom_rate, iters=iterations)
         ratio = learned(nnet, num_sections, datafile='./data/original-test-no-header.csv')
-        if verbose:
-            STDOUT_LOCK.acquire()
-            print('%s %f percent after %d iterations.'
-                  %(threading.current_thread().name, ratio * 100, count * iterations))
-            STDOUT_LOCK.release()
+        yell('%s %f percent after %d iterations.'
+              %(threading.current_thread().name, ratio * 100, count * iterations))
         RES_LOCK.acquire()
         results.append((count * iterations, ratio))
         RES_LOCK.release()
