@@ -51,9 +51,9 @@
         \caption{The top layer are inputs, connected by weights to the bottom 
             layer. The weights are changed during training so that they give the 
             desired output for the right input. A common implementation is to use 
-            functions with a range such that -1 < y < 1, so assuming the network 
-            is trained to represent true with 1 and false with -1, this would be 
-            a great output.}
+            activation functions with a range such that -1 < y < 1, so assuming 
+            the network is trained to represent true with 1 and false with -1, this 
+            would be a great output.}
         \label{basicnetwork}
     \end{figure}
 
@@ -65,7 +65,7 @@
     tangent. It was used because it has a domain of all real numbers, it is smooth, 
     continuous, and symmetrical, and the range is -1 to 1. It is also easily 
     derived, which is important in training. During evaluation, the weights of the 
-    neural network are applied as coefficients to the activation function. 
+    neural network are applied as coefficients in the activation function. 
     As the weights change, the steepness of the graph is manipulated, but the 
     y-intersect is always 0 (See Figure~\ref{bias}). The bias node allows shifting
     of the entire graph, which is the only way to train something other than a 0 
@@ -75,7 +75,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[scale=0.4]{images/bias.png}
+        \includegraphics[scale=0.5]{images/bias.png}
         \caption{The graph of a general sigmoidal function as the coefficients 
             (weights) change. Pic taken from StackOverflow: 
             http://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks}
@@ -124,7 +124,7 @@
     knowing it can recognize handwritten characters in a database is not very 
     exciting, but having it recognize a user's in real time would be. So an iOS 
     front end was created to take input, query the server on which the network is 
-    running, and display the most likely results, between 0 to 9, of which digit 
+    running, and display the most likely results of which digit 
     was entered. The only particular I'd like to mention is how surprisingly easy 
     it was to have Apache serve Python files. A single line file in the pub 
     directory on euclid is all it takes. \\
@@ -157,7 +157,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[scale=0.4]{images/experiment.png}
+        \includegraphics[scale=0.3]{images/experiment.png}
         \caption{Example output of the experiment feature of the network training
             application. Data like this helped to determine the best network 
             size and proper coefficients for learning rates. This particular run
@@ -196,7 +196,7 @@
     \paragraph{}In designing this project I aimed to make it modular. Each logical
     task is the responsibility of a specific sub-application. The only exception
     is the experiment, which was used to establish near-optimal coefficients and 
-    explain unusual behavior at the start of the project.
+    help explain unusual behavior at the start of the project.
     The experiment piggy backs as a part of the network training application 
     because of the significant overlap in funcionality. In all, there are five
     sub-applications involved in the process up to this point. The 
@@ -231,14 +231,14 @@
 
     \paragraph{}I was expecting really hard, and it's about what I got. There were 
     a couple especially difficult hurdles I encountered while working on this 
-    project. When I first starting trying to train handwritten digit recognition I 
+    project. When I first started trying to train handwritten digit recognition I 
     didn't get any performance better than about 15\% successful recognition. I 
     trained for days on even small samples of data and the success rate just 
-    stalled. Worse still, it was unpredictable and inconsistent. This is why I 
-    added the ``experiment" mode to the network training application. I could see 
+    stalled. Worse still, it was unpredictable and inconsistent. I added an extra
+    test that graphed performance as the network was scaled. I could see 
     that ``skinny" three-layer networks -- networks with fewer than about 60 nodes 
     per layer -- mastered data sets quickly and flawlessly. As the networks grew 
-    larger they became wildly inconsistent. The experiment trained a constant 
+    larger they became wildly inconsistent. The test trained a constant 
     function for a constant number of iterations on increasingly large networks and 
     graphed the error rate and time to completion versus size. Figure~\ref{badgraph}
     shows the initial results. There were so many moving pieces I couldn't imagine 
@@ -265,7 +265,7 @@
     Similar to the bump from two to three layers, the change from three to four 
     meant lower learning rates to avoid the increased chance of becoming stuck in 
     local minima and longer training times to facilitate the exponentially 
-    increasing number of connections. 
+    increased number of connections. 
     
     \paragraph{}Now, finally, it seems to be working with acceptable
     performance. To further increase the success I believe finding an 
@@ -274,8 +274,8 @@
 
     \begin{figure}
         \centering
-        \includegraphics[scale=0.4]{images/bad_learning.png}
-        \caption{The experiment run with the initial learning rate. Notice that
+        \includegraphics[scale=0.3]{images/bad_learning.png}
+        \caption{Early scaling test run with bad learning rates. Notice that
             as the network grows larger the success of the network becomes as
             unsure as a coin flip.}
         \label{badgraph}
@@ -284,8 +284,8 @@
     \begin{figure}
         \centering
         \includegraphics[scale=0.5]{images/good_learning.png}
-        \caption{The experiment run with a learning rate and momentum rate 
-            1/1000th of the magnitude used in Figure~\ref{badgraph}}
+        \caption{The scaling test run with a learning rate and momentum rate 
+            1/1000th of the magnitudes used in Figure~\ref{badgraph}}
         \label{goodgraph}
     \end{figure}
 
